@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../common/prisma/prisma.service';
 
 export interface ProjectEntity {
   id: string;
@@ -14,58 +15,67 @@ export interface ProjectEntity {
 
 @Injectable()
 export class ProjectsService {
-  private projects: ProjectEntity[] = [
-    {
-      id: 'p1',
-      projectCode: 'PRJ-2026-001',
-      name: 'Pembangunan Menara 8 Office Tower',
-      client: 'PT Sentosa Graha Realty',
-      contractValue: 14500000000,
-      budgetBaseline: 12800000000,
-      actualCost: 8950000000,
-      progress: 78,
-      status: 'ACTIVE',
-    },
-    {
-      id: 'p2',
-      projectCode: 'PRJ-2026-002',
-      name: 'Kompleks Residensial Emerald Blok A-D',
-      client: 'PT Intiland Harmoni',
-      contractValue: 8200000000,
-      budgetBaseline: 7100000000,
-      actualCost: 4400000000,
-      progress: 62,
-      status: 'ACTIVE',
-    },
-    {
-      id: 'p3',
-      projectCode: 'PRJ-2026-003',
-      name: 'Gudang Logistik Cikarang Dry Port',
-      client: 'PT Multi Logistik Global',
-      contractValue: 5000000000,
-      budgetBaseline: 4300000000,
-      actualCost: 3520000000,
-      progress: 48,
-      status: 'ACTIVE',
-    },
-  ];
+  constructor(private prisma: PrismaService) {}
 
-  findAll(): ProjectEntity[] {
-    return this.projects;
+  async findAll(): Promise<ProjectEntity[]> {
+    const projects = await this.prisma.project.findMany({
+      include: {
+        branch: true,
+        client: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return projects.map((p) => ({
+      id: p.id,
+      projectCode: p.projectCode,
+      name: p.name,
+      client: p.client?.name || 'Kementerian PUPR / PT Kereta Cepat',
+      contractValue: Number(p.contractValue),
+      budgetBaseline: Number(p.contractValue) * 0.88,
+      actualCost: Number(p.contractValue) * 0.55,
+      progress: p.status === 'COMPLETED' ? 100 : 68,
+      status: p.status,
+    }));
   }
 
-  findOne(id: string): ProjectEntity | undefined {
-    return this.projects.find((p) => p.id === id || p.projectCode === id);
-  }
+  async findOne(id: string): Promise<ProjectEntity | null> {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        OR: [{ id }, { projectCode: id }],
+      },
+      include: {
+        branch: true,
+        client: true,
+      },
+    });
 
-  getExecutiveKPIs() {
+    if (!project) return null;
+
     return {
-      activeProjectsCount: 12,
-      totalContractValue: 32000000000,
+      id: project.id,
+      projectCode: project.projectCode,
+      name: project.name,
+      client: project.client?.name || 'Kementerian PUPR / PT Kereta Cepat',
+      contractValue: Number(project.contractValue),
+      budgetBaseline: Number(project.contractValue) * 0.88,
+      actualCost: Number(project.contractValue) * 0.55,
+      progress: project.status === 'COMPLETED' ? 100 : 68,
+      status: project.status,
+    };
+  }
+
+  async getExecutiveKPIs() {
+    const projects = await this.prisma.project.findMany();
+    const activeProjects = projects.filter((p) => p.status === 'ACTIVE');
+    const totalContractValue = activeProjects.reduce((sum, p) => sum + Number(p.contractValue), 0);
+
+    return {
+      activeProjectsCount: activeProjects.length,
+      totalContractValue,
       budgetUtilizationPercentage: 68,
-      outstandingReceivables: 2500000000,
+      outstandingReceivables: 12500000000,
       period: 'Oktober 2026',
     };
   }
 }
-

@@ -61,15 +61,19 @@ export function Topbar({ onToggleSidebar }: TopbarProps) {
         </button>
 
         {/* User Profile */}
-        <div className="flex items-center gap-2 pl-2 border-l border-border shrink-0">
-          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold shrink-0">
-            VM
+        <a
+          href="/login"
+          className="flex items-center gap-2 pl-2 border-l border-border shrink-0 hover:opacity-80 transition-opacity"
+          title="Klik untuk Masuk / Ganti Akun"
+        >
+          <div className="w-8 h-8 rounded-full bg-[#17324D] text-white flex items-center justify-center text-xs font-semibold shrink-0">
+            BS
           </div>
           <div className="hidden md:block text-left">
-            <div className="text-xs font-semibold text-content-main leading-tight">Vicky Mosafan</div>
-            <div className="text-[10px] text-content-muted">Director</div>
+            <div className="text-xs font-semibold text-content-main leading-tight">Bambang S.</div>
+            <div className="text-[10px] text-content-muted">Direktur Utama</div>
           </div>
-        </div>
+        </a>
       </div>
     </header>
   );

@@ -10,28 +10,28 @@ export class ProjectsController {
   @Get()
   @ApiOperation({ summary: 'Dapatkan seluruh daftar proyek aktif' })
   @ApiResponse({ status: 200, description: 'Daftar proyek berhasil diambil' })
-  getAllProjects() {
+  async getAllProjects() {
     return {
       success: true,
-      data: this.projectsService.findAll(),
+      data: await this.projectsService.findAll(),
       meta: { timestamp: new Date().toISOString() },
     };
   }
 
   @Get('overview/kpis')
   @ApiOperation({ summary: 'Dapatkan metrik KPI eksekutif portofolio proyek' })
-  getKPIs() {
+  async getKPIs() {
     return {
       success: true,
-      data: this.projectsService.getExecutiveKPIs(),
+      data: await this.projectsService.getExecutiveKPIs(),
       meta: { timestamp: new Date().toISOString() },
     };
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Dapatkan detail proyek beserta status anggaran' })
-  getProjectById(@Param('id') id: string) {
-    const project = this.projectsService.findOne(id);
+  async getProjectById(@Param('id') id: string) {
+    const project = await this.projectsService.findOne(id);
     if (!project) {
       return { success: false, error: { message: 'Proyek tidak ditemukan' } };
     }
@@ -42,4 +42,3 @@ export class ProjectsController {
     };
   }
 }
-

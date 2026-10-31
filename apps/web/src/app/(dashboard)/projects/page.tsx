@@ -1,50 +1,79 @@
 import { Building2, Plus, Search, Calendar, ChevronRight } from "lucide-react";
 
-export default function ProjectsPage() {
-  const projects = [
-    {
-      id: "PRJ-2026-001",
-      name: "Pembangunan Gedung Menara 8 Office Tower",
-      client: "PT Sentosa Graha Realty",
-      branch: "Cabang Jakarta",
-      pm: "Hendra Gunawan, ST",
-      contractValue: "Rp 14.500.000.000",
-      budgetBaseline: "Rp 12.800.000.000",
-      actualCost: "Rp 8.950.000.000",
-      startDate: "15 Jan 2026",
-      endDate: "30 Nov 2026",
-      progress: 78,
-      status: "ACTIVE",
-    },
-    {
-      id: "PRJ-2026-002",
-      name: "Kompleks Residensial Emerald Blok A-D (45 Unit)",
-      client: "PT Intiland Harmoni",
-      branch: "Cabang Jakarta",
-      pm: "Rudi Hartono, ST",
-      contractValue: "Rp 8.200.000.000",
-      budgetBaseline: "Rp 7.100.000.000",
-      actualCost: "Rp 4.400.000.000",
-      startDate: "01 Mar 2026",
-      endDate: "15 Des 2026",
-      progress: 62,
-      status: "ACTIVE",
-    },
-    {
-      id: "PRJ-2026-003",
-      name: "Pembangunan Gudang Logistik Cikarang Dry Port",
-      client: "PT Multi Logistik Global",
-      branch: "Cabang Jakarta",
-      pm: "Dedi Supriyadi, ST",
-      contractValue: "Rp 5.000.000.000",
-      budgetBaseline: "Rp 4.300.000.000",
-      actualCost: "Rp 3.520.000.000",
-      startDate: "10 Mei 2026",
-      endDate: "20 Jan 2027",
-      progress: 48,
-      status: "ACTIVE",
-    },
-  ];
+const fallbackProjects = [
+  {
+    id: "PRJ-2026-LRT",
+    name: "Pembangunan Stasiun LRT Dukuh Atas Hub",
+    client: "Kementerian Perhubungan RI",
+    branch: "Cabang Jakarta",
+    pm: "Ir. Hendra Gunawan, ST",
+    contractValue: "Rp 45.000.000.000",
+    budgetBaseline: "Rp 39.600.000.000",
+    actualCost: "Rp 24.750.000.000",
+    startDate: "15 Jan 2026",
+    endDate: "30 Nov 2026",
+    progress: 68,
+    status: "ACTIVE",
+  },
+  {
+    id: "PRJ-2026-TOL",
+    name: "Jalan Tol Akses Pelabuhan Patimban Seksi 2",
+    client: "BPJT Kementerian PUPR",
+    branch: "Cabang Jakarta",
+    pm: "Rudi Hartono, ST",
+    contractValue: "Rp 120.000.000.000",
+    budgetBaseline: "Rp 105.600.000.000",
+    actualCost: "Rp 66.000.000.000",
+    startDate: "01 Feb 2026",
+    endDate: "30 Apr 2027",
+    progress: 42,
+    status: "ACTIVE",
+  },
+  {
+    id: "PRJ-2025-HSP",
+    name: "Gedung RSUD Regional 8 Lantai",
+    client: "Dinas Kesehatan Prov. DKI",
+    branch: "Cabang Jakarta",
+    pm: "Dedi Supriyadi, ST",
+    contractValue: "Rp 88.000.000.000",
+    budgetBaseline: "Rp 77.440.000.000",
+    actualCost: "Rp 48.400.000.000",
+    startDate: "01 Mar 2025",
+    endDate: "28 Feb 2026",
+    progress: 100,
+    status: "COMPLETED",
+  },
+];
+
+async function getProjects() {
+  try {
+    const res = await fetch("http://localhost:4000/api/v1/projects", { cache: "no-store" });
+    if (!res.ok) throw new Error("API error");
+    const json = await res.json();
+    if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+      return json.data.map((p: any) => ({
+        id: p.projectCode,
+        name: p.name,
+        client: p.client,
+        branch: "Cabang Jakarta",
+        pm: "Ir. Hendra Gunawan",
+        contractValue: `Rp ${Number(p.contractValue).toLocaleString("id-ID")}`,
+        budgetBaseline: `Rp ${Number(p.budgetBaseline).toLocaleString("id-ID")}`,
+        actualCost: `Rp ${Number(p.actualCost).toLocaleString("id-ID")}`,
+        startDate: "15 Jan 2026",
+        endDate: "30 Nov 2026",
+        progress: p.progress,
+        status: p.status,
+      }));
+    }
+  } catch (e) {
+    // Fallback if offline
+  }
+  return fallbackProjects;
+}
+
+export default async function ProjectsPage() {
+  const projects = await getProjects();
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full">
