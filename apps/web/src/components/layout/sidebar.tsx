@@ -35,6 +35,7 @@ const navSections: NavSection[] = [
     title: "UTAMA",
     items: [
       { title: "Executive Overview", href: "/overview", icon: LayoutDashboard },
+      { title: "Persetujuan & SoD", href: "/approvals", icon: ShieldCheck, badge: "Live" },
     ],
   },
   {
