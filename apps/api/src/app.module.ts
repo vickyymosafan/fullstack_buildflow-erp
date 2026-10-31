@@ -9,6 +9,7 @@ import { ProcurementModule } from './modules/procurement/procurement.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { FinanceModule } from './modules/finance/finance.module';
 import { HRModule } from './modules/hr/hr.module';
+import { QualityModule } from './modules/quality/quality.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { HRModule } from './modules/hr/hr.module';
     InventoryModule,
     FinanceModule,
     HRModule,
+    QualityModule,
   ],
   controllers: [],
   providers: [],

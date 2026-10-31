@@ -515,13 +515,21 @@ model DailyReport {
 }
 
 model Inspection {
-  id          String   @id @default(uuid())
-  projectId   String
-  title       String
-  status      String   @default("PASSED") // PASSED, FAILED, NCR_ISSUED
-  inspectedAt DateTime @default(now())
+  id            String   @id @default(uuid())
+  projectId     String
+  title         String
+  category      String   @default("QUALITY_QC") // QUALITY_QC, SAFETY_K3, ENVIRONMENTAL
+  status        String   @default("PASSED") // PASSED, FAILED, NCR_ISSUED
+  severity      String   @default("LOW") // LOW, MEDIUM, HIGH, CRITICAL
+  location      String?
+  inspectorName String   @default("Tim QC / K3 Lapangan")
+  score         Float?   @default(100.0)
+  notes         String?
+  ncrNumber     String?
+  actionPlan    String?
+  inspectedAt   DateTime @default(now())
 
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("inspections")
 }
