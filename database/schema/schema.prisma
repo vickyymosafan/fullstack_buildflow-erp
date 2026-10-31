@@ -227,6 +227,7 @@ model Project {
   dailyReports     DailyReport[]
   inspections      Inspection[]
   documents        Document[]
+  timesheets       Timesheet[]
 
   @@unique([organizationId, projectCode])
   @@map("projects")
@@ -473,8 +474,29 @@ model Employee {
   createdAt    DateTime    @default(now())
 
   department   Department? @relation(fields: [departmentId], references: [id])
+  timesheets   Timesheet[]
 
   @@map("employees")
+}
+
+model Timesheet {
+  id            String   @id @default(uuid())
+  employeeId    String
+  projectId     String?
+  workDate      DateTime
+  hoursWorked   Decimal  @default(8.0) @db.Decimal(5, 2)
+  overtimeHours Decimal  @default(0.0) @db.Decimal(5, 2)
+  taskCategory  String?  // PEMBESIAN, BEKISTING, PENGECORAN, MEP, K3
+  status        String   @default("APPROVED") // PENDING, APPROVED, REJECTED
+  dailyWage     Decimal  @default(150000) @db.Decimal(18, 2)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@unique([employeeId, workDate])
+  @@map("timesheets")
 }
 
 model DailyReport {
