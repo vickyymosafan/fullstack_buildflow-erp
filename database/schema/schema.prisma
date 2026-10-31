@@ -1,0 +1,559 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// 1. CORE PLATFORM & IDENTITY
+// ==========================================
+
+model Organization {
+  id              String         @id @default(uuid())
+  name            String
+  legalName       String?
+  defaultCurrency String         @default("IDR")
+  timezone        String         @default("Asia/Jakarta")
+  status          String         @default("ACTIVE")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  branches        Branch[]
+  departments     Department[]
+  users           User[]
+  roles           Role[]
+  projects        Project[]
+  products        Product[]
+  accounts        Account[]
+  auditLogs       AuditLog[]
+  outboxEvents    DomainOutbox[]
+  notifications   Notification[]
+
+  @@map("organizations")
+}
+
+model Branch {
+  id             String       @id @default(uuid())
+  organizationId String
+  code           String
+  name           String
+  address        String?
+  status         String       @default("ACTIVE")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  departments    Department[]
+  warehouses     Warehouse[]
+  projects       Project[]
+
+  @@unique([organizationId, code])
+  @@map("branches")
+}
+
+model Department {
+  id             String       @id @default(uuid())
+  organizationId String
+  branchId       String?
+  code           String
+  name           String
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  branch         Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  employees      Employee[]
+
+  @@map("departments")
+}
+
+model User {
+  id             String       @id @default(uuid())
+  organizationId String
+  email          String
+  passwordHash   String
+  fullName       String
+  status         String       @default("ACTIVE")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  userRoles      UserRole[]
+  auditLogs      AuditLog[]   @relation("UserAudits")
+  managedProjects Project[]   @relation("ProjectManager")
+  createdOutbox  DomainOutbox[]
+
+  @@unique([organizationId, email])
+  @@map("users")
+}
+
+model Role {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  description    String?
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  permissions    RolePermission[]
+  userRoles      UserRole[]
+
+  @@unique([organizationId, name])
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(uuid())
+  code        String           @unique
+  description String?
+  roles       RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  branchId  String?
+  projectId String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@map("user_roles")
+}
+
+model AuditLog {
+  id             String       @id @default(uuid())
+  organizationId String
+  actorId        String?
+  action         String
+  resourceType   String
+  resourceId     String
+  payload        Json?
+  ipAddress      String?
+  correlationId  String?
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor          User?        @relation("UserAudits", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, resourceType, resourceId])
+  @@map("audit_logs")
+}
+
+// ==========================================
+// 2. CRM & SALES
+// ==========================================
+
+model Client {
+  id          String     @id @default(uuid())
+  name        String
+  legalName   String?
+  email       String?
+  phone       String?
+  address     String?
+  createdAt   DateTime   @default(now())
+
+  contracts   Contract[]
+  projects    Project[]
+
+  @@map("clients")
+}
+
+model Contract {
+  id             String   @id @default(uuid())
+  clientId       String
+  contractNumber String   @unique
+  title          String
+  contractValue  Decimal  @db.Decimal(18, 4)
+  startDate      DateTime
+  endDate        DateTime
+  status         String   @default("DRAFT") // DRAFT, SIGNED, ACTIVE, COMPLETED, TERMINATED
+  createdAt      DateTime @default(now())
+
+  client         Client   @relation(fields: [clientId], references: [id])
+  projects       Project[]
+
+  @@map("contracts")
+}
+
+// ==========================================
+// 3. PROJECT MANAGEMENT
+// ==========================================
+
+model Project {
+  id               String       @id @default(uuid())
+  organizationId   String
+  branchId         String
+  clientId         String?
+  contractId       String?
+  projectCode      String
+  name             String
+  projectManagerId String?
+  contractValue    Decimal      @default(0) @db.Decimal(18, 4)
+  plannedStart     DateTime?
+  plannedEnd       DateTime?
+  actualStart      DateTime?
+  actualEnd        DateTime?
+  status           String       @default("PLANNING") // PLANNING, ACTIVE, ON_HOLD, COMPLETED, CLOSED
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id])
+  branch           Branch       @relation(fields: [branchId], references: [id])
+  client           Client?      @relation(fields: [clientId], references: [id])
+  contract         Contract?    @relation(fields: [contractId], references: [id])
+  projectManager   User?        @relation("ProjectManager", fields: [projectManagerId], references: [id])
+
+  budgets          Budget[]
+  tasks            Task[]
+  purchaseOrders   PurchaseOrder[]
+  dailyReports     DailyReport[]
+  inspections      Inspection[]
+  documents        Document[]
+
+  @@unique([organizationId, projectCode])
+  @@map("projects")
+}
+
+model Task {
+  id           String    @id @default(uuid())
+  projectId    String
+  parentTaskId String?
+  name         String
+  wbsCode      String?
+  startDate    DateTime?
+  dueDate      DateTime?
+  progress     Int       @default(0) // 0 - 100%
+  status       String    @default("TODO") // TODO, IN_PROGRESS, REVIEW, DONE
+  createdAt    DateTime  @default(now())
+
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parentTask   Task?     @relation("TaskHierarchy", fields: [parentTaskId], references: [id])
+  subTasks     Task[]    @relation("TaskHierarchy")
+
+  @@map("tasks")
+}
+
+// ==========================================
+// 4. COST ESTIMATION & BUDGET
+// ==========================================
+
+model CostCategory {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  type        String       // MATERIAL, LABOR, EQUIPMENT, SUBCON, OVERHEAD
+  budgetItems BudgetItem[]
+
+  @@map("cost_categories")
+}
+
+model Budget {
+  id                String       @id @default(uuid())
+  projectId         String
+  version           Int          @default(1)
+  status            String       @default("DRAFT") // DRAFT, SUBMITTED, APPROVED, SUPERSEDED
+  totalBudgetAmount Decimal      @default(0) @db.Decimal(18, 4)
+  approvedAt        DateTime?
+  approvedBy        String?
+  createdAt         DateTime     @default(now())
+
+  project           Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  items             BudgetItem[]
+
+  @@unique([projectId, version])
+  @@map("budgets")
+}
+
+model BudgetItem {
+  id             String       @id @default(uuid())
+  budgetId       String
+  costCategoryId String
+  costCode       String
+  description    String
+  quantity       Decimal      @db.Decimal(14, 4)
+  unit           String
+  unitPrice      Decimal      @db.Decimal(18, 4)
+  totalAmount    Decimal      @db.Decimal(18, 4)
+  createdAt      DateTime     @default(now())
+
+  budget         Budget       @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  costCategory   CostCategory @relation(fields: [costCategoryId], references: [id])
+
+  @@map("budget_items")
+}
+
+// ==========================================
+// 5. PROCUREMENT & VENDOR
+// ==========================================
+
+model Vendor {
+  id          String          @id @default(uuid())
+  code        String          @unique
+  name        String
+  taxId       String?
+  bankName    String?
+  bankAccount String?
+  status      String          @default("ACTIVE")
+  createdAt   DateTime        @default(now())
+
+  orders      PurchaseOrder[]
+
+  @@map("vendors")
+}
+
+model PurchaseOrder {
+  id             String         @id @default(uuid())
+  organizationId String
+  projectId      String
+  vendorId       String
+  poNumber       String
+  totalAmount    Decimal        @db.Decimal(18, 4)
+  status         String         @default("DRAFT") // DRAFT, PENDING_APPROVAL, APPROVED, REJECTED, CLOSED
+  approvedAt     DateTime?
+  approvedBy     String?
+  createdAt      DateTime       @default(now())
+
+  project        Project        @relation(fields: [projectId], references: [id])
+  vendor         Vendor         @relation(fields: [vendorId], references: [id])
+  goodsReceipts  GoodsReceipt[]
+
+  @@map("purchase_orders")
+}
+
+model GoodsReceipt {
+  id              String        @id @default(uuid())
+  purchaseOrderId String
+  warehouseId     String
+  receiptNumber   String        @unique
+  receivedAt      DateTime      @default(now())
+
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  warehouse       Warehouse     @relation(fields: [warehouseId], references: [id])
+
+  @@map("goods_receipts")
+}
+
+// ==========================================
+// 6. INVENTORY & WAREHOUSE
+// ==========================================
+
+model Product {
+  id             String          @id @default(uuid())
+  organizationId String
+  productCode    String
+  name           String
+  category       String
+  unit           String
+  minStock       Decimal         @default(0) @db.Decimal(14, 4)
+  createdAt      DateTime        @default(now())
+
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  stockMovements StockMovement[]
+
+  @@unique([organizationId, productCode])
+  @@map("products")
+}
+
+model Warehouse {
+  id            String          @id @default(uuid())
+  branchId      String
+  warehouseCode String
+  name          String
+  createdAt     DateTime        @default(now())
+
+  branch        Branch          @relation(fields: [branchId], references: [id])
+  goodsReceipts GoodsReceipt[]
+  movements     StockMovement[]
+
+  @@map("warehouses")
+}
+
+// Immutable Stock Movement Ledger
+model StockMovement {
+  id              String    @id @default(uuid())
+  productId       String
+  warehouseId     String
+  projectId       String?
+  movementType    String    // IN_PURCHASE, OUT_PROJECT_ISSUE, TRANSFER_IN, TRANSFER_OUT, ADJUSTMENT
+  quantity        Decimal   @db.Decimal(14, 4) // Positif untuk masuk, Negatif untuk keluar
+  unitCost        Decimal   @default(0) @db.Decimal(18, 4)
+  referenceType   String    // GOODS_RECEIPT, DAILY_REPORT, STOCK_COUNT
+  referenceId     String
+  transactionDate DateTime  @default(now())
+  createdById     String?
+  createdAt       DateTime  @default(now())
+
+  product         Product   @relation(fields: [productId], references: [id])
+  warehouse       Warehouse @relation(fields: [warehouseId], references: [id])
+
+  @@index([productId, warehouseId])
+  @@index([transactionDate])
+  @@map("stock_movements")
+}
+
+// ==========================================
+// 7. FINANCE & ACCOUNTING
+// ==========================================
+
+model Account {
+  id             String        @id @default(uuid())
+  organizationId String
+  accountCode    String
+  accountName    String
+  accountType    String        // ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE
+  createdAt      DateTime      @default(now())
+
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  journalLines   JournalLine[]
+
+  @@unique([organizationId, accountCode])
+  @@map("accounts")
+}
+
+model JournalEntry {
+  id             String        @id @default(uuid())
+  organizationId String
+  journalNumber  String
+  transactionDate DateTime
+  description    String?
+  postingStatus  String        @default("DRAFT") // DRAFT, POSTED, REVERSED
+  postedAt       DateTime?
+  postedBy       String?
+  createdAt      DateTime      @default(now())
+
+  lines          JournalLine[]
+
+  @@map("journal_entries")
+}
+
+model JournalLine {
+  id             String       @id @default(uuid())
+  journalEntryId String
+  accountId      String
+  projectId      String?
+  debit          Decimal      @default(0) @db.Decimal(18, 4)
+  credit         Decimal      @default(0) @db.Decimal(18, 4)
+  memo           String?
+
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  account        Account      @relation(fields: [accountId], references: [id])
+
+  @@map("journal_lines")
+}
+
+// ==========================================
+// 8. HR & SITE OPERATIONS
+// ==========================================
+
+model Employee {
+  id           String      @id @default(uuid())
+  departmentId String?
+  employeeCode String      @unique
+  fullName     String
+  jobTitle     String
+  status       String      @default("ACTIVE")
+  createdAt    DateTime    @default(now())
+
+  department   Department? @relation(fields: [departmentId], references: [id])
+
+  @@map("employees")
+}
+
+model DailyReport {
+  id          String   @id @default(uuid())
+  projectId   String
+  reportDate  DateTime
+  weather     String?  // CERAH, HUJAN, MENDUNG
+  workSummary String
+  workerCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, reportDate])
+  @@map("daily_reports")
+}
+
+model Inspection {
+  id          String   @id @default(uuid())
+  projectId   String
+  title       String
+  status      String   @default("PASSED") // PASSED, FAILED, NCR_ISSUED
+  inspectedAt DateTime @default(now())
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("inspections")
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  projectId String
+  category  String   // DRAWING, CONTRACT, PERMIT, SPECIFICATION
+  title     String
+  fileUrl   String
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+// ==========================================
+// 9. RELIABILITY: TRANSACTIONAL OUTBOX
+// ==========================================
+
+model DomainOutbox {
+  id             String       @id @default(uuid())
+  organizationId String
+  eventName      String
+  aggregateType  String
+  aggregateId    String
+  payload        Json
+  status         String       @default("PENDING") // PENDING, PROCESSING, PUBLISHED, FAILED
+  retryCount     Int          @default(0)
+  errorMessage   String?
+  createdAt      DateTime     @default(now())
+  publishedAt    DateTime?
+  createdById    String?
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdBy      User?        @relation(fields: [createdById], references: [id])
+
+  @@index([status, createdAt])
+  @@map("domain_outbox")
+}
+
+model Notification {
+  id             String       @id @default(uuid())
+  organizationId String
+  recipientId    String
+  title          String
+  body           String
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("notifications")
+}
+

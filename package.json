@@ -1,0 +1,29 @@
+{
+  "name": "buildflow-erp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modular Enterprise Resource Planning for Medium Construction Enterprises",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "npx pnpm --filter @buildflow/web dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:generate": "prisma generate --schema=database/schema/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=database/schema/schema.prisma",
+    "db:seed": "ts-node database/seeds/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0"
+  },
+  "packageManager": "pnpm@12.16.1"
+}
+
