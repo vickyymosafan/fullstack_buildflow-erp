@@ -7,6 +7,7 @@ import { SiteReportsModule } from './modules/site-reports/site-reports.module';
 import { ApprovalsModule } from './modules/approvals/approvals.module';
 import { ProcurementModule } from './modules/procurement/procurement.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { FinanceModule } from './modules/finance/finance.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     ApprovalsModule,
     ProcurementModule,
     InventoryModule,
+    FinanceModule,
   ],
   controllers: [],
   providers: [],
