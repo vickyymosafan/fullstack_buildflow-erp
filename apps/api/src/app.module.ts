@@ -11,6 +11,7 @@ import { FinanceModule } from './modules/finance/finance.module';
 import { HRModule } from './modules/hr/hr.module';
 import { QualityModule } from './modules/quality/quality.module';
 import { DocumentsModule } from './modules/documents/documents.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DocumentsModule } from './modules/documents/documents.module';
     HRModule,
     QualityModule,
     DocumentsModule,
+    AnalyticsModule,
   ],
   controllers: [],
   providers: [],
