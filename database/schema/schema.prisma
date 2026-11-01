@@ -535,15 +535,22 @@ model Inspection {
 }
 
 model Document {
-  id        String   @id @default(uuid())
-  projectId String
-  category  String   // DRAWING, CONTRACT, PERMIT, SPECIFICATION
-  title     String
-  fileUrl   String
-  version   Int      @default(1)
-  createdAt DateTime @default(now())
+  id             String   @id @default(uuid())
+  projectId      String
+  documentNumber String?  @unique
+  category       String   // DRAWING, CONTRACT, PERMIT, SPECIFICATION
+  title          String
+  description    String?
+  fileUrl        String
+  fileType       String?  // PDF, DWG, BIM, XLSX, DOCX
+  fileSize       String?  // e.g. "14.2 MB"
+  version        Int      @default(1)
+  uploadedBy     String?  // e.g. "Arsitek Utama / Chief Drafter"
+  status         String   @default("APPROVED") // APPROVED, UNDER_REVIEW, SUPERSEDED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
 
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("documents")
 }
