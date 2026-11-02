@@ -15,6 +15,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { CrmModule } from './modules/crm/crm.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { OrchestrationModule } from './modules/orchestration/orchestration.module';
+import { HseModule } from './modules/hse/hse.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { OrchestrationModule } from './modules/orchestration/orchestration.modul
     FinanceModule,
     HRModule,
     QualityModule,
+    HseModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
