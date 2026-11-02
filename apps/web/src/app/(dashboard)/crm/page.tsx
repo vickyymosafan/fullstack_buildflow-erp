@@ -312,11 +312,10 @@ export default function CrmPage() {
       {/* Toast Notification */}
       {notification && (
         <div
-          className={`p-4 rounded-lg flex items-center justify-between text-sm shadow-md transition-all ${
-            notification.type === "success"
+          className={`p-4 rounded-lg flex items-center justify-between text-sm shadow-md transition-all ${notification.type === "success"
               ? "bg-emerald-50 text-emerald-900 border border-emerald-200"
               : "bg-rose-50 text-rose-900 border border-rose-200"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             {notification.type === "success" ? <CheckCircle2 className="w-5 h-5 text-emerald-600" /> : <AlertCircle className="w-5 h-5 text-rose-600" />}
@@ -459,11 +458,10 @@ export default function CrmPage() {
         <nav className="flex space-x-2 sm:space-x-8 overflow-x-auto pb-px" aria-label="Tabs CRM">
           <button
             onClick={() => setActiveTab("pipeline")}
-            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${
-              activeTab === "pipeline"
+            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${activeTab === "pipeline"
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-            }`}
+              }`}
           >
             <Layers className="w-4 h-4" />
             <span>Pipeline Tender & Bidding</span>
@@ -474,11 +472,10 @@ export default function CrmPage() {
 
           <button
             onClick={() => setActiveTab("clients")}
-            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${
-              activeTab === "clients"
+            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${activeTab === "clients"
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-            }`}
+              }`}
           >
             <Building className="w-4 h-4" />
             <span>Direktori Klien (Owner)</span>
@@ -489,11 +486,10 @@ export default function CrmPage() {
 
           <button
             onClick={() => setActiveTab("contracts")}
-            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${
-              activeTab === "contracts"
+            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${activeTab === "contracts"
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-            }`}
+              }`}
           >
             <FileText className="w-4 h-4" />
             <span>Register Kontrak & SPK</span>
@@ -504,11 +500,10 @@ export default function CrmPage() {
 
           <button
             onClick={() => setActiveTab("analytics")}
-            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${
-              activeTab === "analytics"
+            className={`py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${activeTab === "analytics"
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-            }`}
+              }`}
           >
             <TrendingUp className="w-4 h-4" />
             <span>Analisis Pasar & Win-Rate</span>
@@ -616,13 +611,12 @@ export default function CrmPage() {
                             </div>
                             <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                               <div
-                                className={`h-full rounded-full ${
-                                  tender.winProbability >= 70
+                                className={`h-full rounded-full ${tender.winProbability >= 70
                                     ? "bg-emerald-500"
                                     : tender.winProbability >= 40
-                                    ? "bg-amber-500"
-                                    : "bg-rose-500"
-                                }`}
+                                      ? "bg-amber-500"
+                                      : "bg-rose-500"
+                                  }`}
                                 style={{ width: `${tender.winProbability}%` }}
                               />
                             </div>
@@ -823,13 +817,12 @@ export default function CrmPage() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span
-                            className={`px-2 py-0.5 rounded text-[11px] font-bold font-mono ${
-                              c.status === "ACTIVE"
+                            className={`px-2 py-0.5 rounded text-[11px] font-bold font-mono ${c.status === "ACTIVE"
                                 ? "bg-emerald-100 text-emerald-800"
                                 : c.status === "SIGNED"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-slate-100 text-slate-700"
-                            }`}
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-slate-100 text-slate-700"
+                              }`}
                           >
                             {c.status}
                           </span>
