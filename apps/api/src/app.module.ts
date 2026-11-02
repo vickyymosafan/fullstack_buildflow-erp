@@ -17,6 +17,7 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { OrchestrationModule } from './modules/orchestration/orchestration.module';
 import { HseModule } from './modules/hse/hse.module';
 import { SubcontractorsModule } from './modules/subcontractors/subcontractors.module';
+import { EquipmentModule } from './modules/equipment/equipment.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SubcontractorsModule } from './modules/subcontractors/subcontractors.mo
     QualityModule,
     HseModule,
     SubcontractorsModule,
+    EquipmentModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
