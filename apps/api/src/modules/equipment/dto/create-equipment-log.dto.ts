@@ -40,3 +40,4 @@ export class CreateEquipmentLogDto {
   @ApiPropertyOptional({ description: 'Kode proyek aktif', example: 'PRJ-2026-001' })
   projectCode?: string;
 }
+

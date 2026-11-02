@@ -349,3 +349,4 @@ runRegressionSuite().catch((err) => {
   console.error('Fatal regression runner error:', err);
   process.exit(1);
 });
+
