@@ -65,3 +65,4 @@ export class SubcontractorsController {
     return this.service.getVendors();
   }
 }
+

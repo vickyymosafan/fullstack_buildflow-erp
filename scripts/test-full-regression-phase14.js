@@ -291,3 +291,4 @@ runRegressionSuite().catch((err) => {
   console.error('Fatal regression suite error:', err);
   process.exit(1);
 });
+
