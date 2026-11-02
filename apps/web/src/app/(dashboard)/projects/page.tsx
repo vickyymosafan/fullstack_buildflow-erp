@@ -117,7 +117,7 @@ export default async function ProjectsPage() {
 
       {/* 1. Mobile & Tablet Card View (xl:hidden) */}
       <div className="xl:hidden space-y-3">
-        {projects.map((p) => (
+        {projects.map((p: any) => (
           <div key={p.id} className="bg-surface rounded-lg border border-border p-4 shadow-sm space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div>
@@ -187,7 +187,7 @@ export default async function ProjectsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {projects.map((p) => (
+            {projects.map((p: any) => (
               <tr key={p.id} className="hover:bg-surface-subtle/50 transition-colors">
                 <td className="py-3 px-4">
                   <div className="font-mono text-action font-semibold">{p.id}</div>

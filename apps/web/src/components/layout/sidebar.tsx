@@ -14,6 +14,7 @@ import {
   FolderLock,
   ShieldCheck,
   BarChart3,
+  Briefcase,
   Settings,
   X,
 } from "lucide-react";
@@ -35,6 +36,7 @@ const navSections: NavSection[] = [
     title: "UTAMA",
     items: [
       { title: "Executive Overview", href: "/overview", icon: LayoutDashboard },
+      { title: "CRM & Tender", href: "/crm", icon: Briefcase, badge: "Live" },
       { title: "Persetujuan & SoD", href: "/approvals", icon: ShieldCheck, badge: "Live" },
     ],
   },

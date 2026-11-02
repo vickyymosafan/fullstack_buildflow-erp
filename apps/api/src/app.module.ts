@@ -12,6 +12,7 @@ import { HRModule } from './modules/hr/hr.module';
 import { QualityModule } from './modules/quality/quality.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { CrmModule } from './modules/crm/crm.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     QualityModule,
     DocumentsModule,
     AnalyticsModule,
+    CrmModule,
   ],
   controllers: [],
   providers: [],

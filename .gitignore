@@ -14,5 +14,6 @@ minio_data
 coverage
 .DS_Store
 .harness
+*.tsbuildinfo
 BUILDFlow_ERP_Blueprint.docx
 BUILDFlow_ERP_Blueprint.pdf
