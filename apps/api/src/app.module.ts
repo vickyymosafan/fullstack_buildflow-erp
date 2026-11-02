@@ -13,6 +13,7 @@ import { QualityModule } from './modules/quality/quality.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { CrmModule } from './modules/crm/crm.module';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CrmModule } from './modules/crm/crm.module';
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
+    SettingsModule,
   ],
   controllers: [],
   providers: [],
