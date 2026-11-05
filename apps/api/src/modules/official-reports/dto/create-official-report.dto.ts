@@ -56,3 +56,4 @@ export class CreateOfficialReportDto {
   @ApiPropertyOptional({ description: 'Kode proyek aktif', example: 'PRJ-NSI-2026' })
   projectCode?: string;
 }
+
