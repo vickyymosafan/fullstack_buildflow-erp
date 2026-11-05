@@ -19,6 +19,7 @@ import { HseModule } from './modules/hse/hse.module';
 import { SubcontractorsModule } from './modules/subcontractors/subcontractors.module';
 import { EquipmentModule } from './modules/equipment/equipment.module';
 import { ChangeOrdersModule } from './modules/change-orders/change-orders.module';
+import { OfficialReportsModule } from './modules/official-reports/official-reports.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ChangeOrdersModule } from './modules/change-orders/change-orders.module
     SubcontractorsModule,
     EquipmentModule,
     ChangeOrdersModule,
+    OfficialReportsModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
