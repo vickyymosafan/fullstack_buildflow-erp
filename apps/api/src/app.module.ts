@@ -32,6 +32,7 @@ import { ContractsModule } from './modules/contracts/contracts.module';
 import { DisasterRecoveryModule } from './modules/disaster-recovery/disaster-recovery.module';
 import { IotGatewayModule } from './modules/iot-gateway/iot-gateway.module';
 import { PhotogrammetryModule } from './modules/photogrammetry/photogrammetry.module';
+import { PrecastPrestressModule } from './modules/precast-prestress/precast-prestress.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { PhotogrammetryModule } from './modules/photogrammetry/photogrammetry.mo
     DisasterRecoveryModule,
     IotGatewayModule,
     PhotogrammetryModule,
+    PrecastPrestressModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,

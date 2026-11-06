@@ -34,6 +34,7 @@ import {
   DatabaseZap,
   Cpu,
   Scan,
+  Columns3,
   X,
 } from "lucide-react";
 
@@ -73,6 +74,7 @@ const navSections: NavSection[] = [
       { title: "Alat Berat & Armada", href: "/equipment", icon: Truck, badge: "Fleet / HM" },
       { title: "IoT Gateway & Telematika", href: "/iot-gateway", icon: Cpu, badge: "IoT / Edge" },
       { title: "Drone & Photogrammetry", href: "/photogrammetry", icon: Scan, badge: "UAV / LiDAR" },
+      { title: "Precast & Post-Tensioning", href: "/precast-prestress", icon: Columns3, badge: "Girder / Lab" },
       { title: "CCO & Addendum Kontrak", href: "/change-orders", icon: FileSignature, badge: "CCO / VO" },
       { title: "Laporan PUPR & Kurva S", href: "/official-reports", icon: Award, badge: "PUPR / EVM" },
       { title: "Konsorsium KSO & Kas Bersama", href: "/joint-operations", icon: Scale, badge: "KSO / JO" },
