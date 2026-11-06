@@ -76,165 +76,13 @@ interface LauncherErectionLog {
   erectedAt: string;
 }
 
-const INITIAL_SEGMENTS: PrecastSegment[] = [
-  {
-    id: "SEG-001",
-    rfidTagCode: "RFID-PCIG-IKN-001",
-    elementType: "PCI-Girder L=40.8m H=2.1m (Span P10-P11 Girder #1)",
-    castingYardLine: "Plant Precast Kariangau Line A - Bed #01",
-    projectId: "PRJ-IKN-TOL-3A",
-    designFcMpa: 50,
-    currentTransferFcMpa: 53.8,
-    steamCuringTempC: 61.5,
-    stage: "ERECTED_ON_PIER",
-    castDate: "2026-10-08T07:00:00.000Z",
-  },
-  {
-    id: "SEG-002",
-    rfidTagCode: "RFID-PCIG-IKN-002",
-    elementType: "PCI-Girder L=40.8m H=2.1m (Span P10-P11 Girder #2)",
-    castingYardLine: "Plant Precast Kariangau Line A - Bed #02",
-    projectId: "PRJ-IKN-TOL-3A",
-    designFcMpa: 50,
-    currentTransferFcMpa: 44.2,
-    steamCuringTempC: 63.0,
-    stage: "STRESSED_YARD_READY",
-    castDate: "2026-10-25T08:00:00.000Z",
-  },
-  {
-    id: "SEG-003",
-    rfidTagCode: "RFID-BOXG-IKN-003",
-    elementType: "Segmental Box Girder SBG-14 (Balanced Cantilever Pier P14)",
-    castingYardLine: "Plant Precast Kariangau Short-Line Match Cast #05",
-    projectId: "PRJ-IKN-TOL-3A",
-    designFcMpa: 55,
-    currentTransferFcMpa: 46.5,
-    steamCuringTempC: 59.8,
-    stage: "DEMOLDED_STOCKYARD",
-    castDate: "2026-11-01T09:30:00.000Z",
-  },
-];
+const INITIAL_SEGMENTS: PrecastSegment[] = [];
 
-const INITIAL_CUBE_TESTS: CubeCompressionTest[] = [
-  {
-    id: "CUBE-001",
-    specimenCode: "LAB-SNI-2026-041",
-    segmentId: "SEG-001",
-    rfidTagCode: "RFID-PCIG-IKN-001",
-    batchDocketNo: "BATCH-BPP-20261008-01",
-    curingAgeDays: 28,
-    targetFcMpa: 50,
-    crushingLoadKn: 950.7,
-    measuredFcMpa: 53.8,
-    strengthAchievementPct: 107.6,
-    sniComplianceStatus: "PASSED_SNI_1974",
-    testedAt: "2026-11-05T10:15:00.000Z",
-  },
-  {
-    id: "CUBE-002",
-    specimenCode: "LAB-SNI-2026-052",
-    segmentId: "SEG-002",
-    rfidTagCode: "RFID-PCIG-IKN-002",
-    batchDocketNo: "BATCH-BPP-20261025-03",
-    curingAgeDays: 7,
-    targetFcMpa: 50,
-    crushingLoadKn: 781.1,
-    measuredFcMpa: 44.2,
-    strengthAchievementPct: 88.4,
-    sniComplianceStatus: "TRANSFER_ELIGIBLE_80PCT",
-    testedAt: "2026-11-01T14:20:00.000Z",
-  },
-  {
-    id: "CUBE-003",
-    specimenCode: "LAB-SNI-2026-063",
-    segmentId: "SEG-003",
-    rfidTagCode: "RFID-BOXG-IKN-003",
-    batchDocketNo: "BATCH-BPP-20261101-02",
-    curingAgeDays: 7,
-    targetFcMpa: 55,
-    crushingLoadKn: 821.7,
-    measuredFcMpa: 46.5,
-    strengthAchievementPct: 84.55,
-    sniComplianceStatus: "TRANSFER_ELIGIBLE_80PCT",
-    testedAt: "2026-11-06T11:00:00.000Z",
-  },
-];
+const INITIAL_CUBE_TESTS: CubeCompressionTest[] = [];
 
-const INITIAL_STRESSING: TendonStressingRecord[] = [
-  {
-    id: "STR-001",
-    segmentId: "SEG-001",
-    rfidTagCode: "RFID-PCIG-IKN-001",
-    tendonCode: "TENDON-CABLE-T1 (19x15.2mm ASTM A416 Grade 270)",
-    jackingForceKn: 3720,
-    gaugePressureBar: 430,
-    theoreticalElongationMm: 270.0,
-    measuredElongationMm: 274.2,
-    elongationDeviationPct: 1.56,
-    toleranceStatus: "WITHIN_SNI_7PCT_TOLERANCE",
-    groutingStatus: "NON_SHRINK_GROUTED",
-    engineerName: "Ir. Bambang Sudjatmiko, MT",
-    stressedAt: "2026-11-02T09:00:00.000Z",
-  },
-  {
-    id: "STR-002",
-    segmentId: "SEG-002",
-    rfidTagCode: "RFID-PCIG-IKN-002",
-    tendonCode: "TENDON-CABLE-T1 (19x15.2mm ASTM A416 Grade 270)",
-    jackingForceKn: 3695,
-    gaugePressureBar: 427,
-    theoreticalElongationMm: 270.0,
-    measuredElongationMm: 266.8,
-    elongationDeviationPct: -1.19,
-    toleranceStatus: "WITHIN_SNI_7PCT_TOLERANCE",
-    groutingStatus: "NON_SHRINK_GROUTED",
-    engineerName: "Ir. Bambang Sudjatmiko, MT",
-    stressedAt: "2026-11-04T15:30:00.000Z",
-  },
-  {
-    id: "STR-003",
-    segmentId: "SEG-003",
-    rfidTagCode: "RFID-BOXG-IKN-003",
-    tendonCode: "CANTILEVER-TOP-T4 (22x15.2mm Grade 270)",
-    jackingForceKn: 4280,
-    gaugePressureBar: 488,
-    theoreticalElongationMm: 310.0,
-    measuredElongationMm: 336.5,
-    elongationDeviationPct: 8.55,
-    toleranceStatus: "ELONGATION_ANOMALY_HOLD",
-    groutingStatus: "AWAITING_GROUTING",
-    engineerName: "Ir. Bambang Sudjatmiko, MT",
-    stressedAt: "2026-11-06T16:10:00.000Z",
-  },
-];
+const INITIAL_STRESSING: TendonStressingRecord[] = [];
 
-const INITIAL_ERECTION: LauncherErectionLog[] = [
-  {
-    id: "ERC-001",
-    segmentId: "SEG-001",
-    rfidTagCode: "RFID-PCIG-IKN-001",
-    spanPierLocation: "Span P10 - P11 (Jembatan Sungai Wain Jalur A)",
-    launcherGantryUnit: "Overhead Launching Gantry LG-220Ton #01",
-    windSpeedKnots: 8.4,
-    camberDeflectionMm: 42.5,
-    bearingPadSeated: true,
-    status: "CERTIFIED_ON_BEARING",
-    inspectorName: "Ir. Hendra Wijaya, MT",
-    erectedAt: "2026-11-05T22:40:00.000Z",
-  },
-  {
-    id: "ERC-002",
-    segmentId: "SEG-002",
-    rfidTagCode: "RFID-PCIG-IKN-002",
-    spanPierLocation: "Span P10 - P11 (Jembatan Sungai Wain Jalur B)",
-    launcherGantryUnit: "Overhead Launching Gantry LG-220Ton #01",
-    windSpeedKnots: 11.2,
-    camberDeflectionMm: 44.0,
-    bearingPadSeated: true,
-    status: "GANTRY_POSITIONING",
-    erectedAt: "2026-11-06T17:15:00.000Z",
-  },
-];
+const INITIAL_ERECTION: LauncherErectionLog[] = [];
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "OVERVIEW", label: "Ikhtisar Precast & Lab" },
@@ -291,26 +139,6 @@ export default function PrecastPrestressPage() {
   }, [toastMsg]);
 
   useEffect(() => {
-    const fetchInitial = async () => {
-      try {
-        const [sRes, cRes, stRes, eRes] = await Promise.all([
-          fetch("http://localhost:4000/api/v1/precast-prestress/segments"),
-          fetch("http://localhost:4000/api/v1/precast-prestress/cube-tests"),
-          fetch("http://localhost:4000/api/v1/precast-prestress/stressing-records"),
-          fetch("http://localhost:4000/api/v1/precast-prestress/erection-logs"),
-        ]);
-        if (sRes.ok) setSegments(await sRes.json());
-        if (cRes.ok) setCubeTests(await cRes.json());
-        if (stRes.ok) setStressingRecords(await stRes.json());
-        if (eRes.ok) setErectionLogs(await eRes.json());
-      } catch {
-        // Fallback to deterministic seed state
-      }
-    };
-    fetchInitial();
-  }, []);
-
-  useEffect(() => {
     if (!activeModal) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -357,32 +185,6 @@ export default function PrecastPrestressPage() {
 
   const handleRegisterSegment = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      rfidTagCode,
-      elementType,
-      castingYardLine,
-      projectId: "PRJ-IKN-TOL-3A",
-      designFcMpa: Number(designFcMpa),
-      steamCuringTempC: Number(steamCuringTempC),
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/precast-prestress/segments/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: PrecastSegment = await res.json();
-        setSegments((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(`Segmen Precast ${created.rfidTagCode} berhasil didaftarkan & lolos batas Steam Curing.`);
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     const fallback: PrecastSegment = {
       id: `SEG-00${segments.length + 1}`,
       rfidTagCode,
@@ -402,41 +204,12 @@ export default function PrecastPrestressPage() {
 
   const handleRecordCubeTest = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      specimenCode,
-      segmentId: "SEG-001",
-      batchDocketNo,
-      curingAgeDays: Number(curingAgeDays),
-      targetFcMpa: Number(targetFcMpa),
-      crushingLoadKn: 960,
-      measuredFcMpa: Number(measuredFcMpa),
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/precast-prestress/cube-tests/record", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: CubeCompressionTest = await res.json();
-        setCubeTests((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(
-          `Uji kuat tekan ${created.specimenCode} tercatat: ${created.measuredFcMpa} MPa (${created.strengthAchievementPct}%).`
-        );
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
-    const pct = Math.round((Number(measuredFcMpa) / Number(targetFcMpa)) * 10000) / 100;
+    const pct = Math.round((Number(measuredFcMpa) / Math.max(1, Number(targetFcMpa))) * 10000) / 100;
     const fallback: CubeCompressionTest = {
       id: `CUBE-00${cubeTests.length + 1}`,
       specimenCode,
-      segmentId: "SEG-001",
-      rfidTagCode: "RFID-PCIG-IKN-001",
+      segmentId: segments[0]?.id ?? "SEG-001",
+      rfidTagCode: segments[0]?.rfidTagCode ?? "RFID-PCIG-IKN-001",
       batchDocketNo,
       curingAgeDays: Number(curingAgeDays),
       targetFcMpa: Number(targetFcMpa),
@@ -455,44 +228,15 @@ export default function PrecastPrestressPage() {
 
   const handleRecordStressing = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      segmentId: "SEG-002",
-      tendonCode,
-      jackingForceKn: Number(jackingForceKn),
-      gaugePressureBar: Number(gaugePressureBar),
-      theoreticalElongationMm: Number(theoreticalElongationMm),
-      measuredElongationMm: Number(measuredElongationMm),
-      engineerName: "Ir. Bambang Sudjatmiko, MT",
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/precast-prestress/stressing-records/record", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: TendonStressingRecord = await res.json();
-        setStressingRecords((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(
-          `Stressing tendon ${created.id} tercatat: Deviasi elongasi ${created.elongationDeviationPct}% (${created.toleranceStatus}).`
-        );
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     const dev =
       Math.round(
-        ((Number(measuredElongationMm) - Number(theoreticalElongationMm)) / Number(theoreticalElongationMm)) * 10000
+        ((Number(measuredElongationMm) - Number(theoreticalElongationMm)) / Math.max(1, Number(theoreticalElongationMm))) * 10000
       ) / 100;
     const within = Math.abs(dev) <= 7.0;
     const fallback: TendonStressingRecord = {
       id: `STR-00${stressingRecords.length + 1}`,
-      segmentId: "SEG-002",
-      rfidTagCode: "RFID-PCIG-IKN-002",
+      segmentId: segments[0]?.id ?? "SEG-001",
+      rfidTagCode: segments[0]?.rfidTagCode ?? "RFID-PCIG-IKN-001",
       tendonCode,
       jackingForceKn: Number(jackingForceKn),
       gaugePressureBar: Number(gaugePressureBar),
@@ -777,38 +521,46 @@ export default function PrecastPrestressPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
-                    {stressingRecords.map((rec) => (
-                      <tr key={rec.id} className="hover:bg-slate-50">
-                        <td className="p-2.5 min-w-0">
-                          <div className="font-mono font-bold text-primary break-words">{rec.rfidTagCode}</div>
-                          <div className="text-[11px] text-slate-600 break-words">{rec.tendonCode}</div>
-                        </td>
-                        <td className="p-2.5 text-slate-700 break-words">
-                          <div className="font-mono font-semibold">{rec.jackingForceKn.toLocaleString("id-ID")} kN</div>
-                          <div className="text-[11px] text-slate-600">{rec.gaugePressureBar} Bar</div>
-                        </td>
-                        <td className="p-2.5 text-slate-700 break-words">
-                          <div className="font-mono font-semibold">{rec.measuredElongationMm} mm</div>
-                          <div className="text-[11px] text-slate-600">
-                            Deviasi: {rec.elongationDeviationPct > 0 ? "+" : ""}
-                            {rec.elongationDeviationPct}%
-                          </div>
-                        </td>
-                        <td className="p-2.5 min-w-0">
-                          <span
-                            className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold break-words ${
-                              rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
-                                ? "bg-emerald-100 text-emerald-900"
-                                : "bg-rose-100 text-rose-900"
-                            }`}
-                          >
-                            {rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
-                              ? "Sesuai SNI (±7%)"
-                              : "Anomali Hold"}
-                          </span>
+                    {stressingRecords.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="p-6 text-center text-slate-600 text-xs">
+                          Belum ada data stressing tendon. Klik <strong>Input Stressing Tendon</strong> di atas untuk menambahkan data.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      stressingRecords.map((rec) => (
+                        <tr key={rec.id} className="hover:bg-slate-50">
+                          <td className="p-2.5 min-w-0">
+                            <div className="font-mono font-bold text-primary break-words">{rec.rfidTagCode}</div>
+                            <div className="text-[11px] text-slate-600 break-words">{rec.tendonCode}</div>
+                          </td>
+                          <td className="p-2.5 text-slate-700 break-words">
+                            <div className="font-mono font-semibold">{rec.jackingForceKn.toLocaleString("id-ID")} kN</div>
+                            <div className="text-[11px] text-slate-600">{rec.gaugePressureBar} Bar</div>
+                          </td>
+                          <td className="p-2.5 text-slate-700 break-words">
+                            <div className="font-mono font-semibold">{rec.measuredElongationMm} mm</div>
+                            <div className="text-[11px] text-slate-600">
+                              Deviasi: {rec.elongationDeviationPct > 0 ? "+" : ""}
+                              {rec.elongationDeviationPct}%
+                            </div>
+                          </td>
+                          <td className="p-2.5 min-w-0">
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold break-words ${
+                                rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
+                                  ? "bg-emerald-100 text-emerald-900"
+                                  : "bg-rose-100 text-rose-900"
+                              }`}
+                            >
+                              {rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
+                                ? "Sesuai SNI (±7%)"
+                                : "Anomali Hold"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -832,46 +584,52 @@ export default function PrecastPrestressPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {segments.map((seg) => (
-                <div key={seg.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-primary text-sm break-words">{seg.rfidTagCode}</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        seg.stage === "ERECTED_ON_PIER"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : seg.stage === "STRESSED_YARD_READY"
-                          ? "bg-sky-100 text-sky-900"
-                          : "bg-amber-100 text-amber-900"
-                      }`}
-                    >
-                      {seg.stage}
-                    </span>
+            {segments.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada segmen precast terdaftar. Klik <strong>Registrasi Segmen RFID</strong> untuk mendaftarkan segmen baru.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {segments.map((seg) => (
+                  <div key={seg.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-primary text-sm break-words">{seg.rfidTagCode}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          seg.stage === "ERECTED_ON_PIER"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : seg.stage === "STRESSED_YARD_READY"
+                            ? "bg-sky-100 text-sky-900"
+                            : "bg-amber-100 text-amber-900"
+                        }`}
+                      >
+                        {seg.stage}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-slate-800 text-sm break-words">{seg.elementType}</div>
+                    <div className="text-xs text-slate-600 break-words">{seg.castingYardLine}</div>
+                    <dl className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-lg">
+                      <div>
+                        <dt className="text-slate-600">Mutu Rencana f&apos;c</dt>
+                        <dd className="font-mono font-bold text-primary">{seg.designFcMpa} MPa</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">f&apos;c Aktual Saat Ini</dt>
+                        <dd className="font-mono font-bold text-emerald-800">{seg.currentTransferFcMpa} MPa</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Suhu Steam Curing</dt>
+                        <dd className="font-mono text-slate-800">{seg.steamCuringTempC} °C</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">ID Segmen</dt>
+                        <dd className="font-mono text-slate-800">{seg.id}</dd>
+                      </div>
+                    </dl>
                   </div>
-                  <div className="font-semibold text-slate-800 text-sm break-words">{seg.elementType}</div>
-                  <div className="text-xs text-slate-600 break-words">{seg.castingYardLine}</div>
-                  <dl className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-lg">
-                    <div>
-                      <dt className="text-slate-600">Mutu Rencana f&apos;c</dt>
-                      <dd className="font-mono font-bold text-primary">{seg.designFcMpa} MPa</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">f&apos;c Aktual Saat Ini</dt>
-                      <dd className="font-mono font-bold text-emerald-800">{seg.currentTransferFcMpa} MPa</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">Suhu Steam Curing</dt>
-                      <dd className="font-mono text-slate-800">{seg.steamCuringTempC} °C</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">ID Segmen</dt>
-                      <dd className="font-mono text-slate-800">{seg.id}</dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -891,49 +649,55 @@ export default function PrecastPrestressPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {cubeTests.map((ct) => (
-                <div key={ct.id} className="rounded-xl border border-slate-200 p-4 space-y-2.5 bg-white min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-primary text-sm">{ct.specimenCode}</span>
-                    <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
-                      Umur {ct.curingAgeDays} Hari
-                    </span>
-                  </div>
-                  <div className="text-xs font-mono text-slate-600">
-                    Segmen: <strong className="text-slate-800">{ct.rfidTagCode}</strong> • {ct.batchDocketNo}
-                  </div>
-                  <dl className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
-                    <div>
-                      <dt className="text-slate-600">Beban Hancur UTM</dt>
-                      <dd className="font-mono font-semibold text-slate-800">{ct.crushingLoadKn} kN</dd>
+            {cubeTests.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada rekaman uji kuat tekan silinder. Klik <strong>Catat Uji Tekan f&apos;c</strong> untuk menambahkan hasil uji lab.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {cubeTests.map((ct) => (
+                  <div key={ct.id} className="rounded-xl border border-slate-200 p-4 space-y-2.5 bg-white min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-primary text-sm">{ct.specimenCode}</span>
+                      <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
+                        Umur {ct.curingAgeDays} Hari
+                      </span>
                     </div>
-                    <div>
-                      <dt className="text-slate-600">Kuat Tekan Terukur</dt>
-                      <dd className="font-mono font-bold text-primary">
-                        {ct.measuredFcMpa} / {ct.targetFcMpa} MPa
-                      </dd>
+                    <div className="text-xs font-mono text-slate-600">
+                      Segmen: <strong className="text-slate-800">{ct.rfidTagCode}</strong> • {ct.batchDocketNo}
                     </div>
-                  </dl>
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-xs font-mono font-semibold text-slate-700">
-                      Capaian: {ct.strengthAchievementPct}%
-                    </span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        ct.sniComplianceStatus === "PASSED_SNI_1974"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : ct.sniComplianceStatus === "TRANSFER_ELIGIBLE_80PCT"
-                          ? "bg-sky-100 text-sky-900"
-                          : "bg-rose-100 text-rose-900"
-                      }`}
-                    >
-                      {ct.sniComplianceStatus}
-                    </span>
+                    <dl className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
+                      <div>
+                        <dt className="text-slate-600">Beban Hancur UTM</dt>
+                        <dd className="font-mono font-semibold text-slate-800">{ct.crushingLoadKn} kN</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Kuat Tekan Terukur</dt>
+                        <dd className="font-mono font-bold text-primary">
+                          {ct.measuredFcMpa} / {ct.targetFcMpa} MPa
+                        </dd>
+                      </div>
+                    </dl>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs font-mono font-semibold text-slate-700">
+                        Capaian: {ct.strengthAchievementPct}%
+                      </span>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          ct.sniComplianceStatus === "PASSED_SNI_1974"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : ct.sniComplianceStatus === "TRANSFER_ELIGIBLE_80PCT"
+                            ? "bg-sky-100 text-sky-900"
+                            : "bg-rose-100 text-rose-900"
+                        }`}
+                      >
+                        {ct.sniComplianceStatus}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -953,49 +717,55 @@ export default function PrecastPrestressPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {stressingRecords.map((rec) => (
-                <div key={rec.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-primary text-sm">{rec.id}</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : "bg-rose-100 text-rose-900"
-                      }`}
-                    >
-                      {rec.toleranceStatus}
-                    </span>
+            {stressingRecords.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada rekaman stressing tendon. Klik <strong>Input Stressing Tendon</strong> untuk menambahkan data penarikan kabel.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {stressingRecords.map((rec) => (
+                  <div key={rec.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-primary text-sm">{rec.id}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          rec.toleranceStatus === "WITHIN_SNI_7PCT_TOLERANCE"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-rose-100 text-rose-900"
+                        }`}
+                      >
+                        {rec.toleranceStatus}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-slate-800 text-xs break-words">{rec.tendonCode}</div>
+                    <div className="text-xs font-mono text-slate-600">RFID: {rec.rfidTagCode}</div>
+                    <dl className="space-y-1.5 text-xs bg-slate-50 p-3 rounded-lg">
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Gaya Jacking:</dt>
+                        <dd className="font-mono font-bold text-primary">
+                          {rec.jackingForceKn.toLocaleString("id-ID")} kN ({rec.gaugePressureBar} Bar)
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Elongasi Teoritis:</dt>
+                        <dd className="font-mono text-slate-800">{rec.theoreticalElongationMm} mm</dd>
+                      </div>
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Elongasi Aktual:</dt>
+                        <dd className="font-mono font-bold text-primary">
+                          {rec.measuredElongationMm} mm ({rec.elongationDeviationPct > 0 ? "+" : ""}
+                          {rec.elongationDeviationPct}%)
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
+                        <dt className="text-slate-600">Status Grouting:</dt>
+                        <dd className="font-mono font-semibold text-emerald-800">{rec.groutingStatus}</dd>
+                      </div>
+                    </dl>
                   </div>
-                  <div className="font-semibold text-slate-800 text-xs break-words">{rec.tendonCode}</div>
-                  <div className="text-xs font-mono text-slate-600">RFID: {rec.rfidTagCode}</div>
-                  <dl className="space-y-1.5 text-xs bg-slate-50 p-3 rounded-lg">
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Gaya Jacking:</dt>
-                      <dd className="font-mono font-bold text-primary">
-                        {rec.jackingForceKn.toLocaleString("id-ID")} kN ({rec.gaugePressureBar} Bar)
-                      </dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Elongasi Teoritis:</dt>
-                      <dd className="font-mono text-slate-800">{rec.theoreticalElongationMm} mm</dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Elongasi Aktual:</dt>
-                      <dd className="font-mono font-bold text-primary">
-                        {rec.measuredElongationMm} mm ({rec.elongationDeviationPct > 0 ? "+" : ""}
-                        {rec.elongationDeviationPct}%)
-                      </dd>
-                    </div>
-                    <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
-                      <dt className="text-slate-600">Status Grouting:</dt>
-                      <dd className="font-mono font-semibold text-emerald-800">{rec.groutingStatus}</dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -1015,56 +785,62 @@ export default function PrecastPrestressPage() {
               </p>
             </div>
 
-            <div className="space-y-3">
-              {erectionLogs.map((log) => (
-                <div
-                  key={log.id}
-                  className="rounded-xl border border-slate-200 p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white min-w-0"
-                >
-                  <div className="space-y-1.5 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono font-bold text-primary text-sm">{log.id}</span>
-                      <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
-                        {log.rfidTagCode}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                          log.status === "CERTIFIED_ON_BEARING"
-                            ? "bg-emerald-100 text-emerald-900"
-                            : "bg-amber-100 text-amber-900"
-                        }`}
-                      >
-                        {log.status}
-                      </span>
+            {erectionLogs.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada log erection gantry. Segmen yang telah lulus stressing dapat dijadwalkan untuk erection di atas pier.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {erectionLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="rounded-xl border border-slate-200 p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white min-w-0"
+                  >
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono font-bold text-primary text-sm">{log.id}</span>
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
+                          {log.rfidTagCode}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                            log.status === "CERTIFIED_ON_BEARING"
+                              ? "bg-emerald-100 text-emerald-900"
+                              : "bg-amber-100 text-amber-900"
+                          }`}
+                        >
+                          {log.status}
+                        </span>
+                      </div>
+                      <div className="font-semibold text-slate-800 text-sm break-words">{log.spanPierLocation}</div>
+                      <div className="text-xs text-slate-600 break-words">
+                        Unit: <strong>{log.launcherGantryUnit}</strong> • Kecepatan Angin:{" "}
+                        <strong>{log.windSpeedKnots} Knots</strong> • Camber Tengah Bentang:{" "}
+                        <strong>+{log.camberDeflectionMm} mm</strong>
+                      </div>
                     </div>
-                    <div className="font-semibold text-slate-800 text-sm break-words">{log.spanPierLocation}</div>
-                    <div className="text-xs text-slate-600 break-words">
-                      Unit: <strong>{log.launcherGantryUnit}</strong> • Kecepatan Angin:{" "}
-                      <strong>{log.windSpeedKnots} Knots</strong> • Camber Tengah Bentang:{" "}
-                      <strong>+{log.camberDeflectionMm} mm</strong>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-wrap items-center gap-2 shrink-0">
-                    {log.status !== "CERTIFIED_ON_BEARING" ? (
-                      <button
-                        type="button"
-                        onClick={() => handleCertifyErection(log)}
-                        className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-800 text-white hover:bg-emerald-900"
-                      >
-                        <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
-                        Sertifikasi Dudukan Bearing
-                      </button>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
-                        <Check className="w-3.5 h-3.5 shrink-0" />
-                        Certified ({log.inspectorName || "Bridge QA/QC"})
-                      </span>
-                    )}
+                    <div className="flex flex-wrap items-center gap-2 shrink-0">
+                      {log.status !== "CERTIFIED_ON_BEARING" ? (
+                        <button
+                          type="button"
+                          onClick={() => handleCertifyErection(log)}
+                          className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-800 text-white hover:bg-emerald-900"
+                        >
+                          <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                          Sertifikasi Dudukan Bearing
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
+                          <Check className="w-3.5 h-3.5 shrink-0" />
+                          Certified ({log.inspectorName || "Bridge QA/QC"})
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

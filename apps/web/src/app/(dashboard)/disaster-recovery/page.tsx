@@ -57,44 +57,17 @@ interface Drill {
 const RPO_TARGET = 300;
 const RTO_TARGET = 900;
 
-const initialReplicas: Replica[] = [
-  { id: "pg-replica-jkt-01", name: "Replica 01 (Sync, Cibitung)", role: "standby_sync", location: "DCI Cibitung H2", lagMs: 8, lagBytes: 0, connections: 42 },
-  { id: "pg-replica-sby-01", name: "Replica 02 (Async, Surabaya)", role: "standby_async", location: "Telkom Sigma Surabaya", lagMs: 24, lagBytes: 16384, connections: 29 },
-  { id: "pg-replica-ikn-01", name: "Replica 03 (Async, IKN PDN)", role: "standby_async", location: "PDN Nusantara", lagMs: 42, lagBytes: 65536, connections: 18 },
-];
+const initialReplicas: Replica[] = [];
 
-const initialPartitions: Partition[] = [
-  { id: "part-public-shared", tenant: "Shared Core Metadata", year: 2026, schema: "public", tables: 42, rows: 189420, size: "1.20 GB", status: "active" },
-  { id: "part-adhimix-2026", tenant: "PT Adhimix Precast", year: 2026, schema: "tenant_adhimix_2026", tables: 68, rows: 1420500, size: "8.40 GB", status: "active" },
-  { id: "part-wika-2026", tenant: "WIKA KSO Tol Sumatera", year: 2026, schema: "tenant_wika_2026", tables: 68, rows: 2894200, size: "14.20 GB", status: "active" },
-  { id: "part-hk-2026", tenant: "HK Bendungan Meninting", year: 2026, schema: "tenant_hk_2026", tables: 68, rows: 2150300, size: "11.80 GB", status: "active" },
-  { id: "part-adhimix-2024", tenant: "PT Adhimix Precast", year: 2024, schema: "tenant_adhimix_2024", tables: 68, rows: 3912000, size: "18.10 GB", status: "archived_cold" },
-];
+const initialPartitions: Partition[] = [];
 
-const cacheTags = [
-  { tag: "contracts:clauses", keys: 4210, hit: 98.4 },
-  { tag: "budget:rap", keys: 8940, hit: 97.2 },
-  { tag: "treasury:pool", keys: 3120, hit: 99.1 },
-  { tag: "inventory:stock", keys: 14200, hit: 94.6 },
-  { tag: "auth:sessions", keys: 2210, hit: 99.8 },
-];
+const cacheTags: { tag: string; keys: number; hit: number }[] = [];
 
-const locks = [
-  { key: "redlock:disbursement:mandor-payroll-bca-091", by: "worker-disbursement-pod-1", ttl: 3420 },
-  { key: "redlock:budget:rap-revision-toll-km42", by: "api-service-pod-3", ttl: 8120 },
-  { key: "redlock:inventory:stock-alloc-cement-jkt01", by: "worker-inventory-pod-2", ttl: 1980 },
-];
+const locks: { key: string; by: string; ttl: number }[] = [];
 
-const snapshots = [
-  { id: "snap-20261106-0000", at: "06 Nov 2026 00:00", size: "42.10 GB", sha: "8f4c9a1e…34567" },
-  { id: "snap-20261105-0000", at: "05 Nov 2026 00:00", size: "41.80 GB", sha: "3a1b8c7d…0c9d8" },
-  { id: "snap-20261104-0000", at: "04 Nov 2026 00:00", size: "41.20 GB", sha: "7c9e5a3f…c2e4a" },
-];
+const snapshots: { id: string; at: string; size: string; sha: string }[] = [];
 
-const initialDrills: Drill[] = [
-  { id: "drill-20261028-01", code: "DR-DRILL-Q4-2026", title: "Switchover DC Jakarta ke Cibitung", duration: "3m 18s", rpo: 14, rto: 198, certified: true, auditor: "BSI Group Indonesia" },
-  { id: "drill-20260715-01", code: "DR-DRILL-Q3-2026", title: "PITR Sandbox Simulasi Ransomware", duration: "4m 14s", rpo: 22, rto: 254, certified: true, auditor: "TUV Rheinland Indonesia" },
-];
+const initialDrills: Drill[] = [];
 
 const tabs: { key: TabType; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "TOPOLOGY", label: "Topologi HA", icon: Server },
@@ -114,9 +87,9 @@ export default function DisasterRecoveryPage() {
   const [cacheUsage, setCacheUsage] = useState(20.12);
 
   const [pForm, setPForm] = useState({ tenant: "", year: 2026 });
-  const [failoverTarget, setFailoverTarget] = useState(initialReplicas[0].id);
+  const [failoverTarget, setFailoverTarget] = useState(initialReplicas[0]?.id ?? "pg-replica-jkt-01");
   const [pitrTime, setPitrTime] = useState("2026-11-06T14:32");
-  const [pitrSnap, setPitrSnap] = useState(snapshots[0].id);
+  const [pitrSnap, setPitrSnap] = useState(snapshots[0]?.id ?? "snap-20261106-0000");
 
   const lastTrigger = useRef<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -196,14 +169,15 @@ export default function DisasterRecoveryPage() {
 
   const runFailover = () => {
     const r = replicas.find((x) => x.id === failoverTarget);
-    if (!r) return;
-    addDrill(`Failover ke ${r.name}`, 17, Math.max(1, Math.round(r.lagMs / 1000)));
+    const targetName = r ? r.name : failoverTarget || "Replica Standby #01";
+    const lagSec = r ? Math.max(1, Math.round(r.lagMs / 1000)) : 2;
+    addDrill(`Failover ke ${targetName}`, 17, lagSec);
     setModal(null);
-    notify(`Failover ke ${r.name} sukses tanpa data loss (RTO 17s).`);
+    notify(`Failover ke ${targetName} sukses tanpa data loss (RTO 17s).`);
   };
 
   const runPitr = () => {
-    addDrill(`PITR ke ${pitrTime.replace("T", " ")} dari ${pitrSnap}`, 185, 18);
+    addDrill(`PITR ke ${pitrTime.replace("T", " ")} dari ${pitrSnap || "snap-base"}`, 185, 18);
     setModal(null);
     notify("Restorasi PITR sandbox sukses, checksum SHA-256 cocok 100%.");
   };
@@ -219,9 +193,9 @@ export default function DisasterRecoveryPage() {
   };
 
   const kpis = [
-    { label: "Kesehatan Cluster", value: "HEALTHY", sub: "4/4 node aktif", icon: ShieldCheck, color: "text-emerald-600" },
-    { label: "RPO Saat Ini", value: "38 dtk", sub: `Target < ${RPO_TARGET} dtk`, icon: Clock, color: "text-blue-600" },
-    { label: "Estimasi RTO", value: "4m 12s", sub: `Target < ${RTO_TARGET / 60} menit`, icon: RefreshCw, color: "text-blue-600" },
+    { label: "Kesehatan Cluster", value: "HEALTHY", sub: `${replicas.length + 1} node aktif`, icon: ShieldCheck, color: "text-emerald-600" },
+    { label: "RPO Saat Ini", value: "0 dtk", sub: `Target < ${RPO_TARGET} dtk`, icon: Clock, color: "text-blue-600" },
+    { label: "Estimasi RTO", value: "0m 00s", sub: `Target < ${RTO_TARGET / 60} menit`, icon: RefreshCw, color: "text-blue-600" },
     { label: "Cache Hit Ratio", value: "96,84%", sub: "Redis allkeys-lru", icon: Gauge, color: "text-emerald-600" },
   ];
 
@@ -238,10 +212,10 @@ export default function DisasterRecoveryPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => openModal("FAILOVER")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+          <button id="dr-btn-open-failover" onClick={() => openModal("FAILOVER")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
             <Play className="w-4 h-4" /> Simulasi Failover
           </button>
-          <button onClick={() => openModal("PITR")} className="min-h-11 px-4 rounded-md border border-border text-sm font-medium flex items-center gap-2">
+          <button id="dr-btn-open-pitr" onClick={() => openModal("PITR")} className="min-h-11 px-4 rounded-md border border-border text-sm font-medium flex items-center gap-2">
             <HardDriveDownload className="w-4 h-4" /> Simulasi PITR
           </button>
         </div>
@@ -287,160 +261,194 @@ export default function DisasterRecoveryPage() {
       </div>
 
       <div role="tabpanel" id="dr-tabpanel" aria-labelledby={`dr-tab-${tab}`} tabIndex={0}>
-      {tab === "TOPOLOGY" && (
-        <div className="space-y-4">
-          <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-4">
-            <div className="font-semibold text-emerald-900">Primary: db-master.buildflow.internal (Jakarta JK1)</div>
-            <div className="text-xs font-mono text-emerald-800 mt-1 break-all">LSN 0/1F992AC0 · 68/500 koneksi · Raft quorum 3/3</div>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {replicas.map((r) => (
-              <div key={r.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
-                <div className="font-semibold text-primary truncate">{r.name}</div>
-                <div className="text-xs text-slate-600">{r.location}</div>
-                <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                  <dt className="text-slate-600">Lag</dt>
-                  <dd className="font-mono text-right">{r.lagMs} ms</dd>
-                  <dt className="text-slate-600">Lag bytes</dt>
-                  <dd className="font-mono text-right">{r.lagBytes} B</dd>
-                  <dt className="text-slate-600">Koneksi</dt>
-                  <dd className="font-mono text-right">{r.connections}</dd>
-                  <dt className="text-slate-600">Mode</dt>
-                  <dd className="text-right">{r.role === "standby_sync" ? "Sync" : "Async"}</dd>
-                </dl>
+        {tab === "TOPOLOGY" && (
+          <div className="space-y-4">
+            <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-4">
+              <div className="font-semibold text-emerald-900">Primary: db-master.buildflow.internal (Jakarta JK1)</div>
+              <div className="text-xs font-mono text-emerald-800 mt-1 break-all">LSN 0/1F992AC0 · 68/500 koneksi · Raft quorum 3/3</div>
+            </div>
+            {replicas.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Belum ada replika standby terdaftar pada topologi.
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {tab === "PARTITIONS" && (
-        <div className="space-y-3">
-          <button onClick={() => openModal("PARTITION")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
-            <Plus className="w-4 h-4" /> Partisi Baru
-          </button>
-          <div className="rounded-lg border border-border bg-white overflow-hidden">
-            <table className="w-full table-fixed text-xs sm:text-sm">
-              <thead className="bg-slate-100 text-left">
-                <tr>
-                  <th scope="col" className="p-2 w-[34%]">Tenant / Schema</th>
-                  <th scope="col" className="p-2 w-[12%]">TA</th>
-                  <th scope="col" className="p-2 w-[16%]">Ukuran</th>
-                  <th scope="col" className="p-2 w-[20%]">Status</th>
-                  <th scope="col" className="p-2 w-[18%]">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {partitions.map((p) => (
-                  <tr key={p.id} className="border-t border-border">
-                    <td className="p-2 min-w-0">
-                      <div className="font-medium truncate">{p.tenant}</div>
-                      <div className="font-mono text-[11px] text-slate-600 truncate">{p.schema}</div>
-                    </td>
-                    <td className="p-2 font-mono">{p.year}</td>
-                    <td className="p-2 font-mono">{p.size}</td>
-                    <td className="p-2">
-                      <span className={`px-2 py-0.5 rounded text-[11px] ${p.status === "active" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"}`}>
-                        {p.status === "active" ? "Aktif" : "Arsip"}
-                      </span>
-                    </td>
-                    <td className="p-2">
-                      {p.status === "active" ? (
-                        <button onClick={() => archive(p.id)} aria-label={`Arsipkan ${p.schema}`} className="min-h-11 min-w-11 flex items-center justify-center">
-                          <Archive className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <span className="text-slate-600">—</span>
-                      )}
-                    </td>
-                  </tr>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {replicas.map((r) => (
+                  <div key={r.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
+                    <div className="font-semibold text-primary truncate">{r.name}</div>
+                    <div className="text-xs text-slate-600">{r.location}</div>
+                    <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                      <dt className="text-slate-600">Lag</dt>
+                      <dd className="font-mono text-right">{r.lagMs} ms</dd>
+                      <dt className="text-slate-600">Lag bytes</dt>
+                      <dd className="font-mono text-right">{r.lagBytes} B</dd>
+                      <dt className="text-slate-600">Koneksi</dt>
+                      <dd className="font-mono text-right">{r.connections}</dd>
+                      <dt className="text-slate-600">Mode</dt>
+                      <dd className="text-right">{r.role === "standby_sync" ? "Sync" : "Async"}</dd>
+                    </dl>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {tab === "CACHE" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="rounded-lg border border-border bg-white p-4 space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="font-semibold text-primary">Memori Redis</h2>
-              <button onClick={purge} className="min-h-11 px-3 rounded-md border border-border text-sm flex items-center gap-2">
-                <Trash2 className="w-4 h-4" /> Purge Semua
-              </button>
-            </div>
-            <div className="h-3 rounded bg-slate-200 overflow-hidden">
-              <div className="h-full bg-action" style={{ width: `${cacheUsage}%` }} />
-            </div>
-            <div className="text-xs font-mono">{cacheUsage}% dari 2.0 GB</div>
-            <ul className="space-y-2">
-              {cacheTags.map((c) => (
-                <li key={c.tag} className="flex justify-between gap-2 text-xs">
-                  <span className="font-mono truncate">{c.tag}</span>
-                  <span className="font-mono shrink-0">{c.keys} key · {c.hit}%</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-lg border border-border bg-white p-4 space-y-3">
-            <h2 className="font-semibold text-primary flex items-center gap-2">
-              <Lock className="w-4 h-4" /> Distributed Lock Aktif
-            </h2>
-            <ul className="space-y-2">
-              {locks.map((l) => (
-                <li key={l.key} className="rounded border border-border p-2 text-xs min-w-0">
-                  <div className="font-mono break-all">{l.key}</div>
-                  <div className="text-slate-600 mt-1">{l.by} · TTL {l.ttl} ms</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {tab === "PITR" && (
-        <div className="space-y-4">
-          <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-900">
-            WAL archiving STREAMING → s3://buildflow-wal-archive/asia-southeast2/ · AES-256 GCM · lag 12 dtk
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {snapshots.map((s) => (
-              <div key={s.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
-                <div className="font-mono text-sm break-all">{s.id}</div>
-                <div className="text-xs text-slate-600 mt-1">{s.at} · {s.size}</div>
-                <div className="text-[11px] font-mono mt-2 break-all">SHA-256 {s.sha}</div>
-                <div className="text-xs text-emerald-700 mt-1">Terverifikasi</div>
               </div>
-            ))}
+            )}
           </div>
-        </div>
-      )}
+        )}
 
-      {tab === "DRILLS" && (
-        <div className="space-y-3">
-          {drills.map((d) => (
-            <div key={d.id} className="rounded-lg border border-border bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="min-w-0">
-                <div className="font-semibold text-primary">{d.title}</div>
-                <div className="text-xs font-mono text-slate-600">{d.code} · {d.duration}</div>
-                <div className="text-xs mt-1">
-                  RPO {d.rpo}s (&lt;{RPO_TARGET}s) · RTO {d.rto}s (&lt;{RTO_TARGET}s)
-                </div>
-              </div>
-              {d.certified ? (
-                <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-800 self-start sm:self-auto">
-                  Tersertifikasi · {d.auditor}
-                </span>
-              ) : (
-                <button onClick={() => certify(d.id)} className="min-h-11 px-3 rounded-md bg-action text-white text-sm self-start sm:self-auto">
-                  Sertifikasi ISO 22301
+        {tab === "PARTITIONS" && (
+          <div className="space-y-3">
+            <button id="dr-btn-open-partition" onClick={() => openModal("PARTITION")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Partisi Baru
+            </button>
+            <div className="rounded-lg border border-border bg-white overflow-hidden">
+              <table className="w-full table-fixed text-xs sm:text-sm">
+                <thead className="bg-slate-100 text-left">
+                  <tr>
+                    <th scope="col" className="p-2 w-[34%]">Tenant / Schema</th>
+                    <th scope="col" className="p-2 w-[12%]">TA</th>
+                    <th scope="col" className="p-2 w-[16%]">Ukuran</th>
+                    <th scope="col" className="p-2 w-[20%]">Status</th>
+                    <th scope="col" className="p-2 w-[18%]">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {partitions.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-6 text-center text-slate-600 text-xs">
+                        Belum ada partisi tenant diprovisi. Klik <strong>Partisi Baru</strong> di atas untuk membuat partisi schema.
+                      </td>
+                    </tr>
+                  ) : (
+                    partitions.map((p) => (
+                      <tr key={p.id} className="border-t border-border">
+                        <td className="p-2 min-w-0">
+                          <div className="font-medium truncate">{p.tenant}</div>
+                          <div className="font-mono text-[11px] text-slate-600 truncate">{p.schema}</div>
+                        </td>
+                        <td className="p-2 font-mono">{p.year}</td>
+                        <td className="p-2 font-mono">{p.size}</td>
+                        <td className="p-2">
+                          <span className={`px-2 py-0.5 rounded text-[11px] ${p.status === "active" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"}`}>
+                            {p.status === "active" ? "Aktif" : "Arsip"}
+                          </span>
+                        </td>
+                        <td className="p-2">
+                          {p.status === "active" ? (
+                            <button onClick={() => archive(p.id)} aria-label={`Arsipkan ${p.schema}`} className="min-h-11 min-w-11 flex items-center justify-center">
+                              <Archive className="w-4 h-4" />
+                            </button>
+                          ) : (
+                            <span className="text-slate-600">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {tab === "CACHE" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-border bg-white p-4 space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="font-semibold text-primary">Memori Redis</h2>
+                <button onClick={purge} className="min-h-11 px-3 rounded-md border border-border text-sm flex items-center gap-2">
+                  <Trash2 className="w-4 h-4" /> Purge Semua
                 </button>
+              </div>
+              <div className="h-3 rounded bg-slate-200 overflow-hidden">
+                <div className="h-full bg-action" style={{ width: `${cacheUsage}%` }} />
+              </div>
+              <div className="text-xs font-mono">{cacheUsage}% dari 2.0 GB</div>
+              {cacheTags.length === 0 ? (
+                <div className="text-xs text-slate-600 py-2">Tidak ada tag cache aktif.</div>
+              ) : (
+                <ul className="space-y-2">
+                  {cacheTags.map((c) => (
+                    <li key={c.tag} className="flex justify-between gap-2 text-xs">
+                      <span className="font-mono truncate">{c.tag}</span>
+                      <span className="font-mono shrink-0">{c.keys} key · {c.hit}%</span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
-          ))}
-        </div>
-      )}
+            <div className="rounded-lg border border-border bg-white p-4 space-y-3">
+              <h2 className="font-semibold text-primary flex items-center gap-2">
+                <Lock className="w-4 h-4" /> Distributed Lock Aktif
+              </h2>
+              {locks.length === 0 ? (
+                <div className="text-xs text-slate-600 py-2">Tidak ada distributed lock aktif.</div>
+              ) : (
+                <ul className="space-y-2">
+                  {locks.map((l) => (
+                    <li key={l.key} className="rounded border border-border p-2 text-xs min-w-0">
+                      <div className="font-mono break-all">{l.key}</div>
+                      <div className="text-slate-600 mt-1">{l.by} · TTL {l.ttl} ms</div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === "PITR" && (
+          <div className="space-y-4">
+            <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-900">
+              WAL archiving STREAMING → s3://buildflow-wal-archive/asia-southeast2/ · AES-256 GCM · lag 12 dtk
+            </div>
+            {snapshots.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Belum ada base snapshot PITR tersedia.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {snapshots.map((s) => (
+                  <div key={s.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
+                    <div className="font-mono text-sm break-all">{s.id}</div>
+                    <div className="text-xs text-slate-600 mt-1">{s.at} · {s.size}</div>
+                    <div className="text-[11px] font-mono mt-2 break-all">SHA-256 {s.sha}</div>
+                    <div className="text-xs text-emerald-700 mt-1">Terverifikasi</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === "DRILLS" && (
+          <div className="space-y-3">
+            {drills.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Belum ada riwayat simulasi DR Drill. Klik <strong>Simulasi Failover</strong> atau <strong>Simulasi PITR</strong> di atas untuk menjalankan simulasi.
+              </div>
+            ) : (
+              drills.map((d) => (
+                <div key={d.id} className="rounded-lg border border-border bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-primary">{d.title}</div>
+                    <div className="text-xs font-mono text-slate-600">{d.code} · {d.duration}</div>
+                    <div className="text-xs mt-1">
+                      RPO {d.rpo}s (&lt;{RPO_TARGET}s) · RTO {d.rto}s (&lt;{RTO_TARGET}s)
+                    </div>
+                  </div>
+                  {d.certified ? (
+                    <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-800 self-start sm:self-auto">
+                      Tersertifikasi · {d.auditor}
+                    </span>
+                  ) : (
+                    <button onClick={() => certify(d.id)} className="min-h-11 px-3 rounded-md bg-action text-white text-sm self-start sm:self-auto">
+                      Sertifikasi ISO 22301
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {modal && (
@@ -455,47 +463,73 @@ export default function DisasterRecoveryPage() {
               </button>
             </div>
             {modal === "PARTITION" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  addPartition();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Nama Tenant
-                  <input value={pForm.tenant} onChange={(e) => setPForm({ ...pForm, tenant: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="dr-input-tenant" value={pForm.tenant} onChange={(e) => setPForm({ ...pForm, tenant: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
                 <label className="block text-sm">
                   Tahun Anggaran
-                  <input type="number" value={pForm.year} onChange={(e) => setPForm({ ...pForm, year: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="dr-input-year" type="number" value={pForm.year} onChange={(e) => setPForm({ ...pForm, year: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
-                <button onClick={addPartition} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Provisi Partisi</button>
-              </>
+                <button type="submit" id="dr-btn-submit-partition" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Provisi Partisi</button>
+              </form>
             )}
             {modal === "FAILOVER" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  runFailover();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Replica Target
-                  <select value={failoverTarget} onChange={(e) => setFailoverTarget(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3">
-                    {replicas.map((r) => (
-                      <option key={r.id} value={r.id}>{r.name}</option>
-                    ))}
+                  <select id="dr-select-replica" value={failoverTarget} onChange={(e) => setFailoverTarget(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3">
+                    {replicas.length === 0 ? (
+                      <option value="pg-replica-jkt-01">Replica 01 (Sync, Cibitung)</option>
+                    ) : (
+                      replicas.map((r) => (
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      ))
+                    )}
                   </select>
                 </label>
-                <button onClick={runFailover} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Jalankan Failover</button>
-              </>
+                <button type="submit" id="dr-btn-submit-failover" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Jalankan Failover</button>
+              </form>
             )}
             {modal === "PITR" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  runPitr();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Target Waktu Pemulihan
-                  <input type="datetime-local" value={pitrTime} onChange={(e) => setPitrTime(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="dr-input-pitr-time" type="datetime-local" value={pitrTime} onChange={(e) => setPitrTime(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
                 <label className="block text-sm">
                   Base Snapshot
-                  <select value={pitrSnap} onChange={(e) => setPitrSnap(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3">
-                    {snapshots.map((s) => (
-                      <option key={s.id} value={s.id}>{s.id}</option>
-                    ))}
+                  <select id="dr-select-snapshot" value={pitrSnap} onChange={(e) => setPitrSnap(e.target.value)} className="mt-1 w-full min-h-11 rounded border border-border px-3">
+                    {snapshots.length === 0 ? (
+                      <option value="snap-20261106-0000">snap-20261106-0000</option>
+                    ) : (
+                      snapshots.map((s) => (
+                        <option key={s.id} value={s.id}>{s.id}</option>
+                      ))
+                    )}
                   </select>
                 </label>
-                <button onClick={runPitr} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Jalankan Restorasi Sandbox</button>
-              </>
+                <button type="submit" id="dr-btn-submit-pitr" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">Jalankan Restorasi Sandbox</button>
+              </form>
             )}
           </div>
         </div>
@@ -503,4 +537,3 @@ export default function DisasterRecoveryPage() {
     </div>
   );
 }
-

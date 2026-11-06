@@ -89,206 +89,13 @@ interface AiVisualDefectRecord {
   resolvedAt?: string;
 }
 
-const INITIAL_MISSIONS: FlightMission[] = [
-  {
-    id: "MSN-001",
-    missionCode: "MSN-IKN-2026-001",
-    projectId: "PRJ-IKN-TOL-3A",
-    projectName: "Tol IKN Seksi 3A (Segmen Karang Joang - KKT Kariangau)",
-    uavModel: "DJI Matrice 350 RTK + Zenmuse L2 LiDAR",
-    pilotName: "Capt. Raka Pratama (DKPPU #8841)",
-    altitudeAglMeters: 90,
-    overlapPct: 80,
-    gsdCmPerPx: 1.35,
-    gcpCount: 14,
-    notamPermitRef: "AIRNAV-BPN-0192/2026",
-    kkopAirspaceStatus: "KKOP_CLEARED",
-    status: "COMPLETED_ORTHO_LIDAR",
-    rmseAccuracyCm: 1.42,
-    densePointsCount: 64200000,
-    capturedPhotosCount: 1480,
-    executedAt: "2026-11-05T08:30:00.000Z",
-  },
-  {
-    id: "MSN-002",
-    missionCode: "MSN-IKN-2026-002",
-    projectId: "PRJ-IKN-TOL-3A",
-    projectName: "Jembatan Sungai Wain & Overpass STA 14+200",
-    uavModel: "DJI Mavic 3 Enterprise RTK (Close-Range Oblique)",
-    pilotName: "Capt. Dimas Anggara (DKPPU #9104)",
-    altitudeAglMeters: 45,
-    overlapPct: 85,
-    gsdCmPerPx: 0.65,
-    gcpCount: 8,
-    notamPermitRef: "AIRNAV-BPN-0205/2026",
-    kkopAirspaceStatus: "KKOP_CLEARED",
-    status: "COMPLETED_ORTHO_LIDAR",
-    rmseAccuracyCm: 0.95,
-    densePointsCount: 38900000,
-    capturedPhotosCount: 920,
-    executedAt: "2026-11-06T09:15:00.000Z",
-  },
-  {
-    id: "MSN-003",
-    missionCode: "MSN-BDG-2026-003",
-    projectId: "PRJ-BENDUNGAN-02",
-    projectName: "Bendungan Sepaku Semoi Paket II (Spillway & Main Dam)",
-    uavModel: "WingtraOne Gen II PPK Fixed-Wing + Sony RX1R II 42MP",
-    pilotName: "Capt. Fajar Nugroho (DKPPU #7732)",
-    altitudeAglMeters: 115,
-    overlapPct: 75,
-    gsdCmPerPx: 1.5,
-    gcpCount: 18,
-    notamPermitRef: "AIRNAV-BPN-0219/2026",
-    kkopAirspaceStatus: "KKOP_CLEARED",
-    status: "PROCESSING_SFM_CLOUD",
-    rmseAccuracyCm: 1.85,
-    densePointsCount: 51400000,
-    capturedPhotosCount: 2150,
-    executedAt: "2026-11-06T14:40:00.000Z",
-  },
-];
+const INITIAL_MISSIONS: FlightMission[] = [];
 
-const INITIAL_POINT_CLOUDS: PointCloudModel[] = [
-  {
-    id: "PCL-001",
-    missionId: "MSN-001",
-    missionCode: "MSN-IKN-2026-001",
-    projectName: "Tol IKN Seksi 3A (STA 10+000 - STA 13+200)",
-    crsepsg: "EPSG:32750 (WGS 84 / UTM Zone 50S - SRGI 2013)",
-    format: "LAZ_COPC_1_4",
-    densePointsCount: 64200000,
-    orthomosaicResolutionCm: 1.35,
-    rmseZCm: 1.42,
-    fileSizeGb: 14.8,
-    opnameReady: true,
-    generatedAt: "2026-11-05T13:10:00.000Z",
-  },
-  {
-    id: "PCL-002",
-    missionId: "MSN-002",
-    missionCode: "MSN-IKN-2026-002",
-    projectName: "Jembatan Sungai Wain 3D Mesh & Close-Range Point Cloud",
-    crsepsg: "EPSG:32750 (WGS 84 / UTM Zone 50S - SRGI 2013)",
-    format: "3D_TILES_CESIUM",
-    densePointsCount: 38900000,
-    orthomosaicResolutionCm: 0.65,
-    rmseZCm: 0.95,
-    fileSizeGb: 9.4,
-    opnameReady: true,
-    generatedAt: "2026-11-06T12:45:00.000Z",
-  },
-  {
-    id: "PCL-003",
-    missionId: "MSN-001",
-    missionCode: "MSN-IKN-2026-001",
-    projectName: "Digital Terrain Model (DTM Bare-Earth LiDAR Classified)",
-    crsepsg: "EPSG:32750 (WGS 84 / UTM Zone 50S - SRGI 2013)",
-    format: "GEOTIFF_DSM_DTM",
-    densePointsCount: 29500000,
-    orthomosaicResolutionCm: 2.0,
-    rmseZCm: 1.42,
-    fileSizeGb: 4.2,
-    opnameReady: true,
-    generatedAt: "2026-11-05T14:00:00.000Z",
-  },
-];
+const INITIAL_POINT_CLOUDS: PointCloudModel[] = [];
 
-const INITIAL_EARTHWORK: EarthworkVolumeRecord[] = [
-  {
-    id: "VOL-001",
-    corridorSegment: "STA 10+000 - STA 11+500 (Galian Bukit & Timbunan Badan Jalan)",
-    projectId: "PRJ-IKN-TOL-3A",
-    missionId: "MSN-001",
-    boqTargetCutM3: 85000,
-    measuredCutM3: 81600,
-    cutProgressPct: 96.0,
-    boqTargetFillM3: 62000,
-    measuredFillM3: 59800,
-    fillProgressPct: 96.45,
-    netMassBalanceM3: 21800,
-    compactionFactor: 1.15,
-    opnameVerificationStatus: "CERTIFIED_FOR_MC",
-    calculatedAt: "2026-11-05T15:20:00.000Z",
-  },
-  {
-    id: "VOL-002",
-    corridorSegment: "STA 11+500 - STA 13+200 (Zona Rawa & Disposal Area C)",
-    projectId: "PRJ-IKN-TOL-3A",
-    missionId: "MSN-001",
-    boqTargetCutM3: 54000,
-    measuredCutM3: 48200,
-    cutProgressPct: 89.26,
-    boqTargetFillM3: 71000,
-    measuredFillM3: 64500,
-    fillProgressPct: 90.85,
-    netMassBalanceM3: -16300,
-    compactionFactor: 1.12,
-    opnameVerificationStatus: "CERTIFIED_FOR_MC",
-    calculatedAt: "2026-11-05T16:05:00.000Z",
-  },
-  {
-    id: "VOL-003",
-    corridorSegment: "Main Dam Spillway Excavation Zone A (Bendungan Sepaku)",
-    projectId: "PRJ-BENDUNGAN-02",
-    missionId: "MSN-003",
-    boqTargetCutM3: 110000,
-    measuredCutM3: 118500,
-    cutProgressPct: 107.73,
-    boqTargetFillM3: 45000,
-    measuredFillM3: 41200,
-    fillProgressPct: 91.56,
-    netMassBalanceM3: 77300,
-    compactionFactor: 1.18,
-    opnameVerificationStatus: "VARIANCE_AUDIT_REQUIRED",
-    calculatedAt: "2026-11-06T16:10:00.000Z",
-  },
-];
+const INITIAL_EARTHWORK: EarthworkVolumeRecord[] = [];
 
-const INITIAL_DEFECTS: AiVisualDefectRecord[] = [
-  {
-    id: "CV-DEF-001",
-    structureElement: "Pier Head P-12 Jembatan Sungai Wain (Sisi Utara)",
-    projectId: "PRJ-IKN-TOL-3A",
-    missionId: "MSN-002",
-    defectType: "STRUCTURAL_CRACK",
-    crackWidthMm: 0.48,
-    defectExtentMeters: 1.65,
-    aiConfidencePct: 97.2,
-    sniSeverityGrade: "CRITICAL_SNI_BREACH",
-    status: "OPEN_NCR_RAISED",
-    detectedAt: "2026-11-06T13:10:00.000Z",
-  },
-  {
-    id: "CV-DEF-002",
-    structureElement: "Box Girder Span 4 Segmen B-08 (Soffit Bawah)",
-    projectId: "PRJ-IKN-TOL-3A",
-    missionId: "MSN-002",
-    defectType: "CONCRETE_SPALLING",
-    crackWidthMm: 0.25,
-    defectExtentMeters: 0.85,
-    aiConfidencePct: 94.8,
-    sniSeverityGrade: "MODERATE_REPAIR_NEEDED",
-    status: "OPEN_NCR_RAISED",
-    detectedAt: "2026-11-06T13:25:00.000Z",
-  },
-  {
-    id: "CV-DEF-003",
-    structureElement: "Dinding Wingwall Abutment A-1 Tol IKN",
-    projectId: "PRJ-IKN-TOL-3A",
-    missionId: "MSN-001",
-    defectType: "WATER_SEEPAGE_HONEYCOMB",
-    crackWidthMm: 0.15,
-    defectExtentMeters: 0.4,
-    aiConfidencePct: 92.1,
-    sniSeverityGrade: "HAIRLINE_MONITORING",
-    status: "REMEDIATED_VERIFIED",
-    inspectorName: "Ir. Hendra Wijaya, MT",
-    remediationNotes: "Patching mortar non-shrink SikaGrout-215 & coating kristalisasi kedap air selesai.",
-    detectedAt: "2026-11-05T17:00:00.000Z",
-    resolvedAt: "2026-11-06T10:30:00.000Z",
-  },
-];
+const INITIAL_DEFECTS: AiVisualDefectRecord[] = [];
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "OVERVIEW", label: "Ikhtisar Geospasial" },
@@ -346,26 +153,6 @@ export default function PhotogrammetryPage() {
   }, [toastMsg]);
 
   useEffect(() => {
-    const fetchInitial = async () => {
-      try {
-        const [mRes, pRes, eRes, aRes] = await Promise.all([
-          fetch("http://localhost:4000/api/v1/photogrammetry/missions"),
-          fetch("http://localhost:4000/api/v1/photogrammetry/point-clouds"),
-          fetch("http://localhost:4000/api/v1/photogrammetry/earthwork-volumes"),
-          fetch("http://localhost:4000/api/v1/photogrammetry/ai-inspections"),
-        ]);
-        if (mRes.ok) setMissions(await mRes.json());
-        if (pRes.ok) setPointClouds(await pRes.json());
-        if (eRes.ok) setEarthworkVolumes(await eRes.json());
-        if (aRes.ok) setAiDefects(await aRes.json());
-      } catch {
-        // Fallback to deterministic seed state
-      }
-    };
-    fetchInitial();
-  }, []);
-
-  useEffect(() => {
     if (!activeModal) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -412,36 +199,6 @@ export default function PhotogrammetryPage() {
 
   const handleRegisterMission = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      missionCode,
-      projectId: "PRJ-IKN-TOL-3A",
-      projectName,
-      uavModel,
-      pilotName,
-      altitudeAglMeters: Number(altitudeAglMeters),
-      overlapPct: 80,
-      gsdCmPerPx: 1.35,
-      gcpCount: Number(gcpCount),
-      notamPermitRef,
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/photogrammetry/missions/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: FlightMission = await res.json();
-        setMissions((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(`Misi terbang drone ${created.missionCode} berhasil didaftarkan & lolos verifikasi KKOP.`);
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     const fallback: FlightMission = {
       id: `MSN-00${missions.length + 1}`,
       missionCode,
@@ -467,27 +224,6 @@ export default function PhotogrammetryPage() {
   };
 
   const handleCompleteMissionProcessing = async (mission: FlightMission) => {
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/photogrammetry/missions/complete-processing", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          missionId: mission.id,
-          densePointsCount: 58400000,
-          rmseAccuracyCm: 1.38,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setMissions((prev) => prev.map((m) => (m.id === mission.id ? data.mission : m)));
-        setPointClouds((prev) => [data.pointCloud, ...prev]);
-        showToast(`Pemrosesan SfM & LiDAR untuk ${mission.missionCode} selesai (RMSE: 1.38 cm).`);
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     setMissions((prev) =>
       prev.map((m) =>
         m.id === mission.id
@@ -495,48 +231,33 @@ export default function PhotogrammetryPage() {
           : m
       )
     );
+    const newPc: PointCloudModel = {
+      id: `PCL-00${pointClouds.length + 1}`,
+      missionId: mission.id,
+      missionCode: mission.missionCode,
+      projectName: mission.projectName,
+      crsepsg: "EPSG:32750 (WGS 84 / UTM Zone 50S - SRGI 2013)",
+      format: "LAZ_COPC_1_4",
+      densePointsCount: 58400000,
+      orthomosaicResolutionCm: mission.gsdCmPerPx,
+      rmseZCm: 1.38,
+      fileSizeGb: 13.6,
+      opnameReady: true,
+      generatedAt: new Date().toISOString(),
+    };
+    setPointClouds((prev) => [newPc, ...prev]);
     showToast(`Pemrosesan SfM & LiDAR untuk ${mission.missionCode} selesai (RMSE: 1.38 cm).`);
   };
 
   const handleCalculateEarthwork = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      corridorSegment,
-      projectId: "PRJ-IKN-TOL-3A",
-      missionId: "MSN-001",
-      boqTargetCutM3: Number(boqTargetCutM3),
-      measuredCutM3: Number(measuredCutM3),
-      boqTargetFillM3: Number(boqTargetFillM3),
-      measuredFillM3: Number(measuredFillM3),
-      compactionFactor: 1.12,
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/photogrammetry/earthwork-volumes/calculate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: EarthworkVolumeRecord = await res.json();
-        setEarthworkVolumes((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(
-          `Kalkulasi Cut & Fill segmen ${created.corridorSegment} selesai (Cut: ${created.cutProgressPct}%, Fill: ${created.fillProgressPct}%).`
-        );
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
-    const cutPct = Math.round((Number(measuredCutM3) / Number(boqTargetCutM3)) * 10000) / 100;
-    const fillPct = Math.round((Number(measuredFillM3) / Number(boqTargetFillM3)) * 10000) / 100;
+    const cutPct = Math.round((Number(measuredCutM3) / Math.max(1, Number(boqTargetCutM3))) * 10000) / 100;
+    const fillPct = Math.round((Number(measuredFillM3) / Math.max(1, Number(boqTargetFillM3))) * 10000) / 100;
     const fallback: EarthworkVolumeRecord = {
       id: `VOL-00${earthworkVolumes.length + 1}`,
       corridorSegment,
       projectId: "PRJ-IKN-TOL-3A",
-      missionId: "MSN-001",
+      missionId: missions[0]?.id ?? "MSN-001",
       boqTargetCutM3: Number(boqTargetCutM3),
       measuredCutM3: Number(measuredCutM3),
       cutProgressPct: cutPct,
@@ -557,41 +278,12 @@ export default function PhotogrammetryPage() {
 
   const handleRunAiInspection = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      structureElement,
-      projectId: "PRJ-IKN-TOL-3A",
-      missionId: "MSN-002",
-      defectType,
-      crackWidthMm: Number(crackWidthMm),
-      defectExtentMeters: Number(defectExtentMeters),
-      aiConfidencePct: 96.8,
-    };
-
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/photogrammetry/ai-inspections/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const created: AiVisualDefectRecord = await res.json();
-        setAiDefects((prev) => [created, ...prev]);
-        setActiveModal(null);
-        showToast(
-          `Inspeksi AI Computer Vision selesai: ${created.structureElement} (${created.sniSeverityGrade}).`
-        );
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     const width = Number(crackWidthMm);
     const fallback: AiVisualDefectRecord = {
       id: `CV-DEF-00${aiDefects.length + 1}`,
       structureElement,
       projectId: "PRJ-IKN-TOL-3A",
-      missionId: "MSN-002",
+      missionId: missions[0]?.id ?? "MSN-001",
       defectType,
       crackWidthMm: width,
       defectExtentMeters: Number(defectExtentMeters),
@@ -608,27 +300,6 @@ export default function PhotogrammetryPage() {
   };
 
   const handleResolveDefect = async (defect: AiVisualDefectRecord) => {
-    try {
-      const res = await fetch("http://localhost:4000/api/v1/photogrammetry/ai-inspections/resolve-defect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          defectId: defect.id,
-          inspectorName: "Ir. Hendra Wijaya, MT (Lead Structural QA/QC)",
-          remediationNotes:
-            "Injeksi Epoxy Sikadur-52 ID bertekanan rendah & verifikasi ultrasonik UPV selesai.",
-        }),
-      });
-      if (res.ok) {
-        const updated: AiVisualDefectRecord = await res.json();
-        setAiDefects((prev) => prev.map((d) => (d.id === defect.id ? updated : d)));
-        showToast(`Defek struktur ${defect.id} telah diverifikasi remediasi & NCR ditutup.`);
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-
     setAiDefects((prev) =>
       prev.map((d) =>
         d.id === defect.id
@@ -884,33 +555,41 @@ export default function PhotogrammetryPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
-                    {earthworkVolumes.map((vol) => (
-                      <tr key={vol.id} className="hover:bg-slate-50">
-                        <td className="p-2.5 min-w-0">
-                          <div className="font-medium text-primary break-words">{vol.corridorSegment}</div>
-                          <div className="text-[11px] font-mono text-slate-600">{vol.id}</div>
-                        </td>
-                        <td className="p-2.5 text-slate-700 break-words">
-                          <div className="font-mono font-semibold">{vol.measuredCutM3.toLocaleString("id-ID")} m³</div>
-                          <div className="text-[11px] text-slate-600">{vol.cutProgressPct}% BOQ</div>
-                        </td>
-                        <td className="p-2.5 text-slate-700 break-words">
-                          <div className="font-mono font-semibold">{vol.measuredFillM3.toLocaleString("id-ID")} m³</div>
-                          <div className="text-[11px] text-slate-600">{vol.fillProgressPct}% BOQ</div>
-                        </td>
-                        <td className="p-2.5 min-w-0">
-                          <span
-                            className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold break-words ${
-                              vol.opnameVerificationStatus === "CERTIFIED_FOR_MC"
-                                ? "bg-emerald-100 text-emerald-900"
-                                : "bg-amber-100 text-amber-900"
-                            }`}
-                          >
-                            {vol.opnameVerificationStatus === "CERTIFIED_FOR_MC" ? "Tersertifikasi MC" : "Audit Variansi"}
-                          </span>
+                    {earthworkVolumes.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="p-6 text-center text-slate-600 text-xs">
+                          Belum ada kalkulasi volume Cut &amp; Fill. Klik <strong>Hitung Cut &amp; Fill</strong> di atas untuk menambahkan data opname.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      earthworkVolumes.map((vol) => (
+                        <tr key={vol.id} className="hover:bg-slate-50">
+                          <td className="p-2.5 min-w-0">
+                            <div className="font-medium text-primary break-words">{vol.corridorSegment}</div>
+                            <div className="text-[11px] font-mono text-slate-600">{vol.id}</div>
+                          </td>
+                          <td className="p-2.5 text-slate-700 break-words">
+                            <div className="font-mono font-semibold">{vol.measuredCutM3.toLocaleString("id-ID")} m³</div>
+                            <div className="text-[11px] text-slate-600">{vol.cutProgressPct}% BOQ</div>
+                          </td>
+                          <td className="p-2.5 text-slate-700 break-words">
+                            <div className="font-mono font-semibold">{vol.measuredFillM3.toLocaleString("id-ID")} m³</div>
+                            <div className="text-[11px] text-slate-600">{vol.fillProgressPct}% BOQ</div>
+                          </td>
+                          <td className="p-2.5 min-w-0">
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold break-words ${
+                                vol.opnameVerificationStatus === "CERTIFIED_FOR_MC"
+                                  ? "bg-emerald-100 text-emerald-900"
+                                  : "bg-amber-100 text-amber-900"
+                              }`}
+                            >
+                              {vol.opnameVerificationStatus === "CERTIFIED_FOR_MC" ? "Tersertifikasi MC" : "Audit Variansi"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -934,79 +613,85 @@ export default function PhotogrammetryPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {missions.map((m) => (
-                <div key={m.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <div className="font-mono font-bold text-primary break-words">{m.missionCode}</div>
-                      <div className="text-xs text-slate-600 break-words">{m.projectName}</div>
-                    </div>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        m.status === "COMPLETED_ORTHO_LIDAR"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : "bg-amber-100 text-amber-900"
-                      }`}
-                    >
-                      {m.status}
-                    </span>
-                  </div>
-
-                  <dl className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-lg">
-                    <div className="min-w-0">
-                      <dt className="text-slate-600">Wahana UAV</dt>
-                      <dd className="font-medium text-slate-800 break-words">{m.uavModel}</dd>
-                    </div>
-                    <div className="min-w-0">
-                      <dt className="text-slate-600">Pilot DKPPU</dt>
-                      <dd className="font-medium text-slate-800 break-words">{m.pilotName}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">AGL &amp; Overlap</dt>
-                      <dd className="font-mono text-slate-800">
-                        {m.altitudeAglMeters}m • {m.overlapPct}%
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">GSD &amp; GCP</dt>
-                      <dd className="font-mono text-slate-800">
-                        {m.gsdCmPerPx} cm/px • {m.gcpCount} GCP
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">Izin KKOP / NOTAM</dt>
-                      <dd className="font-mono text-sky-900 break-words">{m.notamPermitRef}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">Akurasi &amp; Titik</dt>
-                      <dd className="font-mono text-emerald-900 font-semibold">
-                        RMSE {m.rmseAccuracyCm} cm ({(m.densePointsCount / 1000000).toFixed(1)}M)
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-xs font-mono text-slate-600">{m.kkopAirspaceStatus}</span>
-                    {m.status !== "COMPLETED_ORTHO_LIDAR" ? (
-                      <button
-                        type="button"
-                        onClick={() => handleCompleteMissionProcessing(m)}
-                        className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-white hover:bg-primary/90"
+            {missions.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada misi terbang drone terdaftar. Klik <strong>Registrasi Misi Drone</strong> untuk menjadwalkan misi baru.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {missions.map((m) => (
+                  <div key={m.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="font-mono font-bold text-primary break-words">{m.missionCode}</div>
+                        <div className="text-xs text-slate-600 break-words">{m.projectName}</div>
+                      </div>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          m.status === "COMPLETED_ORTHO_LIDAR"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-amber-100 text-amber-900"
+                        }`}
                       >
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        Selesaikan SfM
-                      </button>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
-                        <Check className="w-3.5 h-3.5" />
-                        Terverifikasi BIG
+                        {m.status}
                       </span>
-                    )}
+                    </div>
+
+                    <dl className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-lg">
+                      <div className="min-w-0">
+                        <dt className="text-slate-600">Wahana UAV</dt>
+                        <dd className="font-medium text-slate-800 break-words">{m.uavModel}</dd>
+                      </div>
+                      <div className="min-w-0">
+                        <dt className="text-slate-600">Pilot DKPPU</dt>
+                        <dd className="font-medium text-slate-800 break-words">{m.pilotName}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">AGL &amp; Overlap</dt>
+                        <dd className="font-mono text-slate-800">
+                          {m.altitudeAglMeters}m • {m.overlapPct}%
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">GSD &amp; GCP</dt>
+                        <dd className="font-mono text-slate-800">
+                          {m.gsdCmPerPx} cm/px • {m.gcpCount} GCP
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Izin KKOP / NOTAM</dt>
+                        <dd className="font-mono text-sky-900 break-words">{m.notamPermitRef}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Akurasi &amp; Titik</dt>
+                        <dd className="font-mono text-emerald-900 font-semibold">
+                          RMSE {m.rmseAccuracyCm} cm ({(m.densePointsCount / 1000000).toFixed(1)}M)
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs font-mono text-slate-600">{m.kkopAirspaceStatus}</span>
+                      {m.status !== "COMPLETED_ORTHO_LIDAR" ? (
+                        <button
+                          type="button"
+                          onClick={() => handleCompleteMissionProcessing(m)}
+                          className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-white hover:bg-primary/90"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                          Selesaikan SfM
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
+                          <Check className="w-3.5 h-3.5" />
+                          Terverifikasi BIG
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -1026,45 +711,51 @@ export default function PhotogrammetryPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {pointClouds.map((pc) => (
-                <div key={pc.id} className="rounded-xl border border-slate-200 p-4 space-y-2.5 bg-white min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-primary text-sm">{pc.id}</span>
-                    <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
-                      {pc.format}
-                    </span>
+            {pointClouds.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada model 3D Point Cloud. Selesaikan pemrosesan SfM pada tab Misi Terbang UAV untuk men-generate Point Cloud.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {pointClouds.map((pc) => (
+                  <div key={pc.id} className="rounded-xl border border-slate-200 p-4 space-y-2.5 bg-white min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-primary text-sm">{pc.id}</span>
+                      <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
+                        {pc.format}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-slate-800 text-sm break-words">{pc.projectName}</div>
+                    <div className="text-xs font-mono text-slate-600 break-words">{pc.crsepsg}</div>
+                    <dl className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
+                      <div>
+                        <dt className="text-slate-600">Kerapatan</dt>
+                        <dd className="font-mono font-semibold text-primary">
+                          {(pc.densePointsCount / 1000000).toFixed(1)} Juta Titik
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Ukuran File</dt>
+                        <dd className="font-mono text-slate-800">{pc.fileSizeGb} GB</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">Resolusi GSD</dt>
+                        <dd className="font-mono text-slate-800">{pc.orthomosaicResolutionCm} cm/px</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-600">RMSE Vertikal (Z)</dt>
+                        <dd className="font-mono font-semibold text-emerald-800">{pc.rmseZCm} cm</dd>
+                      </div>
+                    </dl>
+                    <div className="pt-1">
+                      <span className="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-900">
+                        {pc.opnameReady ? "OPNAME READY (<=3cm)" : "RE-CALIBRATION NEEDED"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="font-semibold text-slate-800 text-sm break-words">{pc.projectName}</div>
-                  <div className="text-xs font-mono text-slate-600 break-words">{pc.crsepsg}</div>
-                  <dl className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
-                    <div>
-                      <dt className="text-slate-600">Kerapatan</dt>
-                      <dd className="font-mono font-semibold text-primary">
-                        {(pc.densePointsCount / 1000000).toFixed(1)} Juta Titik
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">Ukuran File</dt>
-                      <dd className="font-mono text-slate-800">{pc.fileSizeGb} GB</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">Resolusi GSD</dt>
-                      <dd className="font-mono text-slate-800">{pc.orthomosaicResolutionCm} cm/px</dd>
-                    </div>
-                    <div>
-                      <dt className="text-slate-600">RMSE Vertikal (Z)</dt>
-                      <dd className="font-mono font-semibold text-emerald-800">{pc.rmseZCm} cm</dd>
-                    </div>
-                  </dl>
-                  <div className="pt-1">
-                    <span className="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-900">
-                      {pc.opnameReady ? "OPNAME READY (<=3cm)" : "RE-CALIBRATION NEEDED"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -1084,53 +775,59 @@ export default function PhotogrammetryPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {earthworkVolumes.map((vol) => (
-                <div key={vol.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-primary text-sm">{vol.id}</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        vol.opnameVerificationStatus === "CERTIFIED_FOR_MC"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : "bg-amber-100 text-amber-900"
-                      }`}
-                    >
-                      {vol.opnameVerificationStatus}
-                    </span>
+            {earthworkVolumes.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada rekaman perhitungan Cut &amp; Fill. Klik <strong>Hitung Cut &amp; Fill</strong> untuk menghitung volume koridor.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {earthworkVolumes.map((vol) => (
+                  <div key={vol.id} className="rounded-xl border border-slate-200 p-4 space-y-3 bg-white min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-primary text-sm">{vol.id}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          vol.opnameVerificationStatus === "CERTIFIED_FOR_MC"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-amber-100 text-amber-900"
+                        }`}
+                      >
+                        {vol.opnameVerificationStatus}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-slate-800 text-sm break-words">{vol.corridorSegment}</div>
+                    <dl className="space-y-1.5 text-xs bg-slate-50 p-3 rounded-lg">
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Target BOQ Cut:</dt>
+                        <dd className="font-mono text-slate-800">{vol.boqTargetCutM3.toLocaleString("id-ID")} m³</dd>
+                      </div>
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Realisasi Cut:</dt>
+                        <dd className="font-mono font-bold text-primary">
+                          {vol.measuredCutM3.toLocaleString("id-ID")} m³ ({vol.cutProgressPct}%)
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
+                        <dt className="text-slate-600">Target BOQ Fill:</dt>
+                        <dd className="font-mono text-slate-800">{vol.boqTargetFillM3.toLocaleString("id-ID")} m³</dd>
+                      </div>
+                      <div className="flex justify-between gap-2">
+                        <dt className="text-slate-600">Realisasi Fill:</dt>
+                        <dd className="font-mono font-bold text-primary">
+                          {vol.measuredFillM3.toLocaleString("id-ID")} m³ ({vol.fillProgressPct}%)
+                        </dd>
+                      </div>
+                      <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
+                        <dt className="text-slate-600">Neraca Massa (Net):</dt>
+                        <dd className="font-mono font-semibold text-slate-800">
+                          {vol.netMassBalanceM3.toLocaleString("id-ID")} m³ ({vol.compactionFactor}x)
+                        </dd>
+                      </div>
+                    </dl>
                   </div>
-                  <div className="font-semibold text-slate-800 text-sm break-words">{vol.corridorSegment}</div>
-                  <dl className="space-y-1.5 text-xs bg-slate-50 p-3 rounded-lg">
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Target BOQ Cut:</dt>
-                      <dd className="font-mono text-slate-800">{vol.boqTargetCutM3.toLocaleString("id-ID")} m³</dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Realisasi Cut:</dt>
-                      <dd className="font-mono font-bold text-primary">
-                        {vol.measuredCutM3.toLocaleString("id-ID")} m³ ({vol.cutProgressPct}%)
-                      </dd>
-                    </div>
-                    <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
-                      <dt className="text-slate-600">Target BOQ Fill:</dt>
-                      <dd className="font-mono text-slate-800">{vol.boqTargetFillM3.toLocaleString("id-ID")} m³</dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-slate-600">Realisasi Fill:</dt>
-                      <dd className="font-mono font-bold text-primary">
-                        {vol.measuredFillM3.toLocaleString("id-ID")} m³ ({vol.fillProgressPct}%)
-                      </dd>
-                    </div>
-                    <div className="flex justify-between gap-2 pt-1 border-t border-slate-200">
-                      <dt className="text-slate-600">Neraca Massa (Net):</dt>
-                      <dd className="font-mono font-semibold text-slate-800">
-                        {vol.netMassBalanceM3.toLocaleString("id-ID")} m³ ({vol.compactionFactor}x)
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -1151,72 +848,78 @@ export default function PhotogrammetryPage() {
               </p>
             </div>
 
-            <div className="space-y-3">
-              {aiDefects.map((def) => (
-                <div
-                  key={def.id}
-                  className="rounded-xl border border-slate-200 p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white min-w-0"
-                >
-                  <div className="space-y-1.5 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono font-bold text-primary text-sm">{def.id}</span>
-                      <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
-                        {def.defectType}
-                      </span>
+            {aiDefects.length === 0 ? (
+              <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 text-slate-600 text-xs">
+                Belum ada temuan defek struktur AI. Klik <strong>Inspeksi Defek AI</strong> untuk menjalankan evaluasi Computer Vision.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {aiDefects.map((def) => (
+                  <div
+                    key={def.id}
+                    className="rounded-xl border border-slate-200 p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white min-w-0"
+                  >
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono font-bold text-primary text-sm">{def.id}</span>
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-200 text-slate-800">
+                          {def.defectType}
+                        </span>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold ${
+                            def.sniSeverityGrade === "CRITICAL_SNI_BREACH"
+                              ? "bg-rose-100 text-rose-900"
+                              : def.sniSeverityGrade === "MODERATE_REPAIR_NEEDED"
+                              ? "bg-amber-100 text-amber-900"
+                              : "bg-sky-100 text-sky-900"
+                          }`}
+                        >
+                          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                          {def.sniSeverityGrade}
+                        </span>
+                      </div>
+                      <div className="font-semibold text-slate-800 text-sm break-words">{def.structureElement}</div>
+                      <div className="text-xs text-slate-600">
+                        Lebar Retak: <strong className="text-primary">{def.crackWidthMm} mm</strong> • Panjang/Luas:{" "}
+                        <strong>{def.defectExtentMeters} m</strong> • Confidence AI: <strong>{def.aiConfidencePct}%</strong>
+                      </div>
+                      {def.remediationNotes && (
+                        <div className="text-xs text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-md break-words">
+                          Remediasi: {def.remediationNotes}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 shrink-0">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold ${
-                          def.sniSeverityGrade === "CRITICAL_SNI_BREACH"
-                            ? "bg-rose-100 text-rose-900"
-                            : def.sniSeverityGrade === "MODERATE_REPAIR_NEEDED"
-                            ? "bg-amber-100 text-amber-900"
-                            : "bg-sky-100 text-sky-900"
+                        className={`px-2.5 py-1 rounded text-xs font-semibold ${
+                          def.status === "REMEDIATED_VERIFIED"
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-rose-100 text-rose-900"
                         }`}
                       >
-                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                        {def.sniSeverityGrade}
+                        {def.status}
                       </span>
+                      {def.status === "OPEN_NCR_RAISED" ? (
+                        <button
+                          type="button"
+                          onClick={() => handleResolveDefect(def)}
+                          className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-800 text-white hover:bg-emerald-900"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                          Verifikasi Injeksi Epoxy
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
+                          <Check className="w-3.5 h-3.5 shrink-0" />
+                          Closed ({def.inspectorName || "QA/QC"})
+                        </span>
+                      )}
                     </div>
-                    <div className="font-semibold text-slate-800 text-sm break-words">{def.structureElement}</div>
-                    <div className="text-xs text-slate-600">
-                      Lebar Retak: <strong className="text-primary">{def.crackWidthMm} mm</strong> • Panjang/Luas:{" "}
-                      <strong>{def.defectExtentMeters} m</strong> • Confidence AI: <strong>{def.aiConfidencePct}%</strong>
-                    </div>
-                    {def.remediationNotes && (
-                      <div className="text-xs text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-md break-words">
-                        Remediasi: {def.remediationNotes}
-                      </div>
-                    )}
                   </div>
-
-                  <div className="flex flex-wrap items-center gap-2 shrink-0">
-                    <span
-                      className={`px-2.5 py-1 rounded text-xs font-semibold ${
-                        def.status === "REMEDIATED_VERIFIED"
-                          ? "bg-emerald-100 text-emerald-900"
-                          : "bg-rose-100 text-rose-900"
-                      }`}
-                    >
-                      {def.status}
-                    </span>
-                    {def.status === "OPEN_NCR_RAISED" ? (
-                      <button
-                        type="button"
-                        onClick={() => handleResolveDefect(def)}
-                        className="min-h-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-800 text-white hover:bg-emerald-900"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                        Verifikasi Injeksi Epoxy
-                      </button>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800">
-                        <Check className="w-3.5 h-3.5 shrink-0" />
-                        Closed ({def.inspectorName || "QA/QC"})
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

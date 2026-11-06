@@ -76,33 +76,15 @@ interface GatewayNode {
   status: "ONLINE" | "BUFFERING_OFFLINE";
 }
 
-const initialTickets: WeighTicket[] = [
-  { id: "wt-1", ticketNo: "WB-20261106-001", plate: "B 9482 UIA", doNo: "DO-SMG-0891", material: "Semen Portland Curah", grossKg: 42680, tareKg: 14200, netKg: 28480, expectedKg: 28500, variancePct: -0.07, status: "MATCHED" },
-  { id: "wt-2", ticketNo: "WB-20261106-002", plate: "BE 8812 YU", doNo: "DO-AGG-1120", material: "Agregat Split 20-30mm", grossKg: 36900, tareKg: 12500, netKg: 24400, expectedKg: 25000, variancePct: -2.4, status: "SHORTAGE_REJECTED" },
-  { id: "wt-3", ticketNo: "WB-20261106-003", plate: "B 9011 KQA", doNo: "DO-ASP-0419", material: "Aspal Pen 60/70 Curah", grossKg: 31890, tareKg: 11900, netKg: 19990, expectedKg: 20000, variancePct: -0.05, status: "MATCHED" },
-];
+const initialTickets: WeighTicket[] = [];
 
-const initialFleet: FleetUnit[] = [
-  { id: "EQ-EXC-001", name: "Komatsu PC200-8MO Excavator #01", zone: "Galian Bendungan Utama", rpm: 1720, burnLph: 18.6, fuelPct: 72.4, hm: 4128.5, geofence: "INSIDE_ZONE" },
-  { id: "EQ-DOZ-002", name: "Caterpillar D6R2 XL Bulldozer #02", zone: "Timbunan Seksi 3B", rpm: 820, burnLph: 6.2, fuelPct: 48.0, hm: 2890.2, geofence: "INSIDE_ZONE" },
-  { id: "EQ-DMP-009", name: "Hino FM 260 JD Dump Truck #09", zone: "Hauling Quarry KM 14", rpm: 0, burnLph: 0, fuelPct: 31.5, hm: 6412.0, geofence: "BREACH_ALERT" },
-];
+const initialFleet: FleetUnit[] = [];
 
-const initialAlerts: FuelAlert[] = [
-  { id: "alert-fuel-01", unitId: "EQ-DMP-009", unitName: "Hino FM 260 JD Dump Truck #09", dropLiters: 38.5, severity: "CRITICAL", status: "OPEN" },
-  { id: "alert-fuel-02", unitId: "EQ-DOZ-002", unitName: "Caterpillar D6R2 XL Bulldozer #02", dropLiters: 21.0, severity: "HIGH", status: "ACKNOWLEDGED", by: "Ir. Hendra Wijaya" },
-];
+const initialAlerts: FuelAlert[] = [];
 
-const initialBatches: BioBatch[] = [
-  { id: "b-1", code: "SYNC-IKN-20261106-A", gate: "Turnstile Gate A - Camp IKN", records: 142, helmetOk: 142, offlineMin: 45 },
-  { id: "b-2", code: "SYNC-MNT-20261106-B", gate: "Turnstile Gate B - Area Spillway", records: 86, helmetOk: 84, offlineMin: 120 },
-];
+const initialBatches: BioBatch[] = [];
 
-const initialGateways: GatewayNode[] = [
-  { id: "1", gwId: "gw-weigh-01", name: "Weighbridge Modbus TCP Node #01", type: "WEIGHBRIDGE_MODBUS", location: "Tol Sumatera Seksi 4", uplink: "Fiber + 5G Backup", rssi: -54, queued: 0, status: "ONLINE" },
-  { id: "2", gwId: "gw-can-01", name: "LoRaWAN & J1939 Fleet Concentrator", type: "OBD_CANBUS_TELEMATICS", location: "Bendungan Meninting", uplink: "Starlink Enterprise Sat-02", rssi: -68, queued: 0, status: "ONLINE" },
-  { id: "3", gwId: "gw-bio-01", name: "Biometric/RFID Turnstile Terminal", type: "BIOMETRIC_RFID_TERMINAL", location: "Camp Pekerja IKN 3B", uplink: "Starlink Business Sat-04", rssi: -81, queued: 34, status: "BUFFERING_OFFLINE" },
-];
+const initialGateways: GatewayNode[] = [];
 
 const tabs: { key: TabType; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "WEIGHBRIDGE", label: "Jembatan Timbang", icon: Scale },
@@ -272,10 +254,10 @@ export default function IotGatewayPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => openModal("WEIGH")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+          <button id="iot-btn-open-weigh" onClick={() => openModal("WEIGH")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
             <Plus className="w-4 h-4" /> Rekam Timbangan
           </button>
-          <button onClick={() => openModal("BIO_SYNC")} className="min-h-11 px-4 rounded-md border border-border bg-white text-primary text-sm font-medium flex items-center gap-2">
+          <button id="iot-btn-open-bio" onClick={() => openModal("BIO_SYNC")} className="min-h-11 px-4 rounded-md border border-border bg-white text-primary text-sm font-medium flex items-center gap-2">
             <RefreshCw className="w-4 h-4" /> Sync Biometrik
           </button>
         </div>
@@ -334,83 +316,103 @@ export default function IotGatewayPage() {
                 </tr>
               </thead>
               <tbody>
-                {tickets.map((t) => (
-                  <tr key={t.id} className="border-t border-border">
-                    <td className="p-2 min-w-0">
-                      <div className="font-mono font-medium truncate">{t.plate}</div>
-                      <div className="font-mono text-[11px] text-slate-600 truncate">{t.ticketNo}</div>
-                    </td>
-                    <td className="p-2 min-w-0">
-                      <div className="font-medium truncate">{t.material}</div>
-                      <div className="font-mono text-[11px] text-slate-600 truncate">{t.doNo}</div>
-                    </td>
-                    <td className="p-2 font-mono">{t.netKg.toLocaleString("id-ID")}</td>
-                    <td className="p-2 font-mono">{t.variancePct}%</td>
-                    <td className="p-2">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[11px] ${
-                          t.status === "MATCHED" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"
-                        }`}
-                      >
-                        {t.status === "MATCHED" ? "Sesuai" : "Selisih"}
-                      </span>
+                {tickets.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-6 text-center text-slate-600 text-xs">
+                      Belum ada tiket timbangan tercatat. Klik <strong>Rekam Timbangan</strong> di atas untuk menambahkan tiket baru.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  tickets.map((t) => (
+                    <tr key={t.id} className="border-t border-border">
+                      <td className="p-2 min-w-0">
+                        <div className="font-mono font-medium truncate">{t.plate}</div>
+                        <div className="font-mono text-[11px] text-slate-600 truncate">{t.ticketNo}</div>
+                      </td>
+                      <td className="p-2 min-w-0">
+                        <div className="font-medium truncate">{t.material}</div>
+                        <div className="font-mono text-[11px] text-slate-600 truncate">{t.doNo}</div>
+                      </td>
+                      <td className="p-2 font-mono">{t.netKg.toLocaleString("id-ID")}</td>
+                      <td className="p-2 font-mono">{t.variancePct}%</td>
+                      <td className="p-2">
+                        <span
+                          className={`px-2 py-0.5 rounded text-[11px] ${
+                            t.status === "MATCHED" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"
+                          }`}
+                        >
+                          {t.status === "MATCHED" ? "Sesuai" : "Selisih"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         )}
 
         {tab === "TELEMATICS" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {fleet.map((u) => (
-              <div key={u.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
-                <div className="font-semibold text-primary truncate">{u.name}</div>
-                <div className="text-xs text-slate-600 truncate">{u.id} · {u.zone}</div>
-                <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                  <dt className="text-slate-600">Putaran Mesin</dt>
-                  <dd className="font-mono text-right">{u.rpm} RPM</dd>
-                  <dt className="text-slate-600">Burn Rate BBM</dt>
-                  <dd className="font-mono text-right">{u.burnLph} L/jam</dd>
-                  <dt className="text-slate-600">Level Tangki</dt>
-                  <dd className="font-mono text-right">{u.fuelPct}%</dd>
-                  <dt className="text-slate-600">Hour Meter</dt>
-                  <dd className="font-mono text-right">{u.hm} HM</dd>
-                  <dt className="text-slate-600">Geofence</dt>
-                  <dd className="text-right font-medium text-emerald-800">
-                    {u.geofence === "INSIDE_ZONE" ? "Dalam Zona" : "Keluar Zona"}
-                  </dd>
-                </dl>
-              </div>
-            ))}
-          </div>
+          fleet.length === 0 ? (
+            <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+              Belum ada unit telematika armada aktif.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {fleet.map((u) => (
+                <div key={u.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
+                  <div className="font-semibold text-primary truncate">{u.name}</div>
+                  <div className="text-xs text-slate-600 truncate">{u.id} · {u.zone}</div>
+                  <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <dt className="text-slate-600">Putaran Mesin</dt>
+                    <dd className="font-mono text-right">{u.rpm} RPM</dd>
+                    <dt className="text-slate-600">Burn Rate BBM</dt>
+                    <dd className="font-mono text-right">{u.burnLph} L/jam</dd>
+                    <dt className="text-slate-600">Level Tangki</dt>
+                    <dd className="font-mono text-right">{u.fuelPct}%</dd>
+                    <dt className="text-slate-600">Hour Meter</dt>
+                    <dd className="font-mono text-right">{u.hm} HM</dd>
+                    <dt className="text-slate-600">Geofence</dt>
+                    <dd className="text-right font-medium text-emerald-800">
+                      {u.geofence === "INSIDE_ZONE" ? "Dalam Zona" : "Keluar Zona"}
+                    </dd>
+                  </dl>
+                </div>
+              ))}
+            </div>
+          )
         )}
 
         {tab === "FUEL_ALERTS" && (
           <div className="space-y-3">
-            {alerts.map((a) => (
-              <div key={a.id} className="rounded-lg border border-border bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="font-semibold text-primary">{a.unitName}</div>
-                  <div className="text-xs font-mono text-slate-600">
-                    {a.unitId} · Penurunan mendadak -{a.dropLiters} Liter saat RPM 0
-                  </div>
-                </div>
-                {a.status === "ACKNOWLEDGED" ? (
-                  <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-800 self-start sm:self-auto">
-                    Terverifikasi · {a.by}
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => acknowledgeAlert(a.id)}
-                    className="min-h-11 px-3 rounded-md bg-action text-white text-sm font-medium self-start sm:self-auto"
-                  >
-                    Verifikasi Investigasi
-                  </button>
-                )}
+            {alerts.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Tidak ada anomali penurunan BBM terdeteksi.
               </div>
-            ))}
+            ) : (
+              alerts.map((a) => (
+                <div key={a.id} className="rounded-lg border border-border bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-primary">{a.unitName}</div>
+                    <div className="text-xs font-mono text-slate-600">
+                      {a.unitId} · Penurunan mendadak -{a.dropLiters} Liter saat RPM 0
+                    </div>
+                  </div>
+                  {a.status === "ACKNOWLEDGED" ? (
+                    <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-800 self-start sm:self-auto">
+                      Terverifikasi · {a.by}
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => acknowledgeAlert(a.id)}
+                      className="min-h-11 px-3 rounded-md bg-action text-white text-sm font-medium self-start sm:self-auto"
+                    >
+                      Verifikasi Investigasi
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         )}
 
@@ -420,42 +422,54 @@ export default function IotGatewayPage() {
               <ShieldCheck className="w-4 h-4 shrink-0" />
               Enkripsi template biometrik SHA-256 sesuai UU PDP No. 27/2022 · Deteksi AI Helm K3 aktif
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {batches.map((b) => (
-                <div key={b.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
-                  <div className="font-semibold text-primary truncate">{b.gate}</div>
-                  <div className="text-xs font-mono text-slate-600 mt-1">{b.code}</div>
-                  <div className="text-xs text-slate-600 mt-2">
-                    {b.records} pekerja tersinkronisasi · Helm K3 {b.helmetOk}/{b.records} · Buffer offline {b.offlineMin} mnt
+            {batches.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Belum ada batch absensi biometrik tersinkronisasi. Klik <strong>Sync Biometrik</strong> di atas untuk memulai sinkronisasi.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {batches.map((b) => (
+                  <div key={b.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
+                    <div className="font-semibold text-primary truncate">{b.gate}</div>
+                    <div className="text-xs font-mono text-slate-600 mt-1">{b.code}</div>
+                    <div className="text-xs text-slate-600 mt-2">
+                      {b.records} pekerja tersinkronisasi · Helm K3 {b.helmetOk}/{b.records} · Buffer offline {b.offlineMin} mnt
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {tab === "GATEWAYS" && (
           <div className="space-y-3">
-            <button onClick={() => openModal("GATEWAY")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+            <button id="iot-btn-open-gateway" onClick={() => openModal("GATEWAY")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
               <Plus className="w-4 h-4" /> Daftarkan Node Gateway
             </button>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {gateways.map((g) => (
-                <div key={g.id} className="rounded-lg border border-border bg-white p-4 space-y-2 min-w-0">
-                  <div className="font-semibold text-primary truncate">{g.name}</div>
-                  <div className="text-xs font-mono text-slate-600 truncate">{g.gwId} · {g.location}</div>
-                  <div className="text-xs text-slate-600">Uplink: {g.uplink} · RSSI {g.rssi} dBm · Antrean {g.queued} paket</div>
-                  <div className="flex items-center justify-between pt-2">
-                    <span className={`px-2 py-0.5 rounded text-[11px] ${g.status === "ONLINE" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"}`}>
-                      {g.status}
-                    </span>
-                    <button onClick={() => pingNode(g.gwId)} className="min-h-11 px-3 rounded-md border border-border text-xs font-medium">
-                      Ping mTLS
-                    </button>
+            {gateways.length === 0 ? (
+              <div className="p-8 text-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-600 text-xs">
+                Belum ada node Edge Gateway terdaftar. Klik <strong>Daftarkan Node Gateway</strong> untuk menambahkan perangkat.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {gateways.map((g) => (
+                  <div key={g.id} className="rounded-lg border border-border bg-white p-4 space-y-2 min-w-0">
+                    <div className="font-semibold text-primary truncate">{g.name}</div>
+                    <div className="text-xs font-mono text-slate-600 truncate">{g.gwId} · {g.location}</div>
+                    <div className="text-xs text-slate-600">Uplink: {g.uplink} · RSSI {g.rssi} dBm · Antrean {g.queued} paket</div>
+                    <div className="flex items-center justify-between pt-2">
+                      <span className={`px-2 py-0.5 rounded text-[11px] ${g.status === "ONLINE" ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-800"}`}>
+                        {g.status}
+                      </span>
+                      <button onClick={() => pingNode(g.gwId)} className="min-h-11 px-3 rounded-md border border-border text-xs font-medium">
+                        Ping mTLS
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -472,49 +486,67 @@ export default function IotGatewayPage() {
               </button>
             </div>
             {modal === "WEIGH" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitWeigh();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Plat Nomor Truk (ANPR)
-                  <input value={wForm.plate} onChange={(e) => setWForm({ ...wForm, plate: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-plate" value={wForm.plate} onChange={(e) => setWForm({ ...wForm, plate: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
                 <label className="block text-sm">
                   Berat Bruto (kg)
-                  <input type="number" value={wForm.grossKg} onChange={(e) => setWForm({ ...wForm, grossKg: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-gross" type="number" value={wForm.grossKg} onChange={(e) => setWForm({ ...wForm, grossKg: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
-                <button onClick={submitWeigh} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
+                <button type="submit" id="iot-btn-submit-weigh" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
                   Simpan Tiket Timbangan
                 </button>
-              </>
+              </form>
             )}
             {modal === "BIO_SYNC" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitBioSync();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Lokasi Gate Turnstile
-                  <input value={bForm.gate} onChange={(e) => setBForm({ ...bForm, gate: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-gate" value={bForm.gate} onChange={(e) => setBForm({ ...bForm, gate: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
                 <label className="block text-sm">
                   Jumlah Log Pekerja Offline
-                  <input type="number" value={bForm.records} onChange={(e) => setBForm({ ...bForm, records: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-records" type="number" value={bForm.records} onChange={(e) => setBForm({ ...bForm, records: Number(e.target.value) })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
-                <button onClick={submitBioSync} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
+                <button type="submit" id="iot-btn-submit-bio" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
                   Jalankan Sinkronisasi
                 </button>
-              </>
+              </form>
             )}
             {modal === "GATEWAY" && (
-              <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitGateway();
+                }}
+                className="space-y-4"
+              >
                 <label className="block text-sm">
                   Gateway ID
-                  <input value={gForm.gwId} onChange={(e) => setGForm({ ...gForm, gwId: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-gwid" value={gForm.gwId} onChange={(e) => setGForm({ ...gForm, gwId: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
                 <label className="block text-sm">
                   Nama Perangkat
-                  <input value={gForm.name} onChange={(e) => setGForm({ ...gForm, name: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
+                  <input id="iot-input-gwname" value={gForm.name} onChange={(e) => setGForm({ ...gForm, name: e.target.value })} className="mt-1 w-full min-h-11 rounded border border-border px-3" />
                 </label>
-                <button onClick={submitGateway} className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
+                <button type="submit" id="iot-btn-submit-gw" className="w-full min-h-11 rounded-md bg-action text-white text-sm font-medium">
                   Simpan Gateway
                 </button>
-              </>
+              </form>
             )}
           </div>
         </div>
