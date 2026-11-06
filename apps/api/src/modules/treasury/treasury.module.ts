@@ -8,3 +8,4 @@ import { TreasuryService } from './treasury.service';
   exports: [TreasuryService],
 })
 export class TreasuryModule {}
+

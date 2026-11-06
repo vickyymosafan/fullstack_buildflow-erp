@@ -54,3 +54,4 @@ export class CreateBatchDisbursementDto {
   @ApiPropertyOptional({ example: 'Mohon prioritas eksekusi batch H2H sebelum cut-off kliring RTGS 14:00 WIB.' })
   notes?: string;
 }
+

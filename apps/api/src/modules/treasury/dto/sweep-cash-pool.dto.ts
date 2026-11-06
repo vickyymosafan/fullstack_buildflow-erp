@@ -25,3 +25,4 @@ export class SweepCashPoolDto {
   @ApiPropertyOptional({ example: 'End of day automatic balance sweep back to Master Escrow Pool' })
   remarks?: string;
 }
+

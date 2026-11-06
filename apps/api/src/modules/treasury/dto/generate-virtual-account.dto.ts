@@ -31,3 +31,4 @@ export class GenerateVirtualAccountDto {
   @ApiPropertyOptional({ example: 'Penagihan Termin Sertifikat Bulanan MC Ke-3 Proyek Istana Negara IKN' })
   description?: string;
 }
+

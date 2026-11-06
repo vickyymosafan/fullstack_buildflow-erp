@@ -37,3 +37,4 @@ export class CreateBankAccountDto {
   @ApiProperty({ example: true, description: 'Status integrasi Host-to-Host (H2H)' })
   isH2HConnected: boolean;
 }
+
