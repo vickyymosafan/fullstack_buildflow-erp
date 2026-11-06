@@ -85,3 +85,4 @@ export class CertifyLauncherErectionDto {
   @ApiProperty({ example: 'Ir. Hendra Wijaya, MT (Chief Bridge Inspector)', description: 'Certifying Inspector' })
   inspectorName!: string;
 }
+
