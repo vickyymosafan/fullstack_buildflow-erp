@@ -2350,3 +2350,4 @@ export default function ContractsDashboardPage() {
     </div>
   );
 }
+

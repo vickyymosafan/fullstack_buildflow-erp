@@ -22,3 +22,4 @@ export class PredictDisputeDto {
   @ApiPropertyOptional({ example: 'BANI_ARBITRATION', description: 'Klausul forum penyelesaian sengketa' })
   forumClause?: string;
 }
+

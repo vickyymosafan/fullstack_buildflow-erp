@@ -35,3 +35,4 @@ export class CreateAmendmentDto {
   @ApiPropertyOptional({ example: 'Penyesuaian galian akibat relokasi utilitas pipa gas PGN dan penambahan masa kerja 30 hari.', description: 'Keterangan latar belakang addendum' })
   description?: string;
 }
+

@@ -35,3 +35,4 @@ export class AnalyzeClauseDto {
   @ApiPropertyOptional({ example: 'FIDIC_RED', description: 'Format standar hukum pembanding' })
   benchmarkStandard?: string;
 }
+

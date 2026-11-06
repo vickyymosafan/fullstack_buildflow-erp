@@ -8,3 +8,4 @@ import { ContractsService } from './contracts.service';
   exports: [ContractsService],
 })
 export class ContractsModule {}
+

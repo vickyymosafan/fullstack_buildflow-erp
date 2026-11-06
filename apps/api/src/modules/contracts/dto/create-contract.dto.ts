@@ -48,3 +48,4 @@ export class CreateContractDto {
   @ApiPropertyOptional({ example: 'PRJ-MRT-2026', description: 'ID referensi proyek' })
   projectId?: string;
 }
+

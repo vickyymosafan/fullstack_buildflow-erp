@@ -19,3 +19,4 @@ export class SimulateLdDto {
   @ApiPropertyOptional({ example: 15, description: 'Hari klaim EOT (Extension of Time) yang dapat diajukan sebagai pembelaan' })
   eligibleEotDays?: number;
 }
+
