@@ -27,6 +27,7 @@ import {
   Briefcase,
   Workflow,
   Settings,
+  Store,
   X,
 } from "lucide-react";
 
@@ -76,6 +77,7 @@ const navSections: NavSection[] = [
     title: "SUPPLY CHAIN & LOGISTIK",
     items: [
       { title: "Pengadaan (Procurement)", href: "/procurement", icon: ShoppingCart },
+      { title: "Vendor & E-Procurement", href: "/vendor-portal", icon: Store, badge: "Portal" },
       { title: "Gudang & Inventaris", href: "/inventory", icon: Boxes },
     ],
   },

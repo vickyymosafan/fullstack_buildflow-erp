@@ -25,6 +25,7 @@ import { HandoverModule } from './modules/handover/handover.module';
 import { CloseoutModule } from './modules/closeout/closeout.module';
 import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
 import { SustainabilityModule } from './modules/sustainability/sustainability.module';
+import { VendorPortalModule } from './modules/vendor-portal/vendor-portal.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { SustainabilityModule } from './modules/sustainability/sustainability.mo
     CloseoutModule,
     ExecutiveBiModule,
     SustainabilityModule,
+    VendorPortalModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
