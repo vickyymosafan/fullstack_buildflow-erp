@@ -32,6 +32,7 @@ import {
   UserCheck,
   Activity,
   Layers,
+  Calculator,
 } from "lucide-react";
 
 // Types

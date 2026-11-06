@@ -16,11 +16,12 @@ const post = (p, b) => fetch(API + p, { method: "POST", headers: { "Content-Type
   const parts = await fetch(API + "/disaster-recovery/partitions").then(j);
   ok("GET partitions", Array.isArray(parts) && parts.length >= 5);
 
-  const cp = await post("/disaster-recovery/partitions/create", { tenantId: "tenant_test", tenantName: "Test", fiscalYear: 2027, schemaName: "tenant_test_2027", partitionKey: "fiscal_year", tables: [] });
+  const uniqueSchema = `tenant_test_${Date.now()}`;
+  const cp = await post("/disaster-recovery/partitions/create", { tenantId: "tenant_test", tenantName: "Test", fiscalYear: 2027, schemaName: uniqueSchema, partitionKey: "fiscal_year", tables: [] });
   const cpj = await cp.json();
-  ok("POST partitions/create", cpj.partition && cpj.partition.schemaName === "tenant_test_2027");
+  ok("POST partitions/create", cpj.partition && cpj.partition.schemaName === uniqueSchema);
 
-  const dup = await post("/disaster-recovery/partitions/create", { tenantId: "tenant_test", tenantName: "Test", fiscalYear: 2027, schemaName: "tenant_test_2027", partitionKey: "fiscal_year", tables: [] });
+  const dup = await post("/disaster-recovery/partitions/create", { tenantId: "tenant_test", tenantName: "Test", fiscalYear: 2027, schemaName: uniqueSchema, partitionKey: "fiscal_year", tables: [] });
   ok("POST partitions/create duplicate -> 400", dup.status === 400);
 
   const ar = await post("/disaster-recovery/partitions/archive", { partitionId: "part-adhimix-2026", targetStorage: "cold_minio_s3", reason: "test", authorizedBy: "QA" }).then(j);

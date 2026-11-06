@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   DatabaseZap,
   Server,
@@ -118,6 +118,53 @@ export default function DisasterRecoveryPage() {
   const [pitrTime, setPitrTime] = useState("2026-11-06T14:32");
   const [pitrSnap, setPitrSnap] = useState(snapshots[0].id);
 
+  const lastTrigger = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  const openModal = (m: "PARTITION" | "FAILOVER" | "PITR") => {
+    lastTrigger.current = document.activeElement as HTMLElement | null;
+    setModal(m);
+  };
+
+  useEffect(() => {
+    if (!modal) {
+      lastTrigger.current?.focus();
+      return;
+    }
+    dialogRef.current?.querySelector<HTMLElement>("input, select, button")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModal(null);
+      if (e.key === "Tab" && dialogRef.current) {
+        const items = dialogRef.current.querySelectorAll<HTMLElement>("button, input, select");
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [modal]);
+
+  const onTabKey = (e: React.KeyboardEvent, idx: number) => {
+    const n = tabs.length;
+    let next = -1;
+    if (e.key === "ArrowRight") next = (idx + 1) % n;
+    if (e.key === "ArrowLeft") next = (idx - 1 + n) % n;
+    if (e.key === "Home") next = 0;
+    if (e.key === "End") next = n - 1;
+    if (next < 0) return;
+    e.preventDefault();
+    setTab(tabs[next].key);
+    document.getElementById(`dr-tab-${tabs[next].key}`)?.focus();
+  };
+
   const notify = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 3500);
@@ -182,19 +229,19 @@ export default function DisasterRecoveryPage() {
     <div className="space-y-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-primary flex items-center gap-2">
-            <DatabaseZap className="w-6 h-6 shrink-0 text-action" />
-            <span className="truncate">Disaster Recovery &amp; High Availability</span>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary flex items-start sm:items-center gap-2">
+            <DatabaseZap className="w-6 h-6 shrink-0 text-action mt-0.5 sm:mt-0" />
+            <span className="break-words">Disaster Recovery &amp; High Availability</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-slate-600 mt-1">
             Partisi multi-tenant, replikasi PostgreSQL, Redis cache, dan Point-in-Time Recovery (ISO 22301).
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => setModal("FAILOVER")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+          <button onClick={() => openModal("FAILOVER")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
             <Play className="w-4 h-4" /> Simulasi Failover
           </button>
-          <button onClick={() => setModal("PITR")} className="min-h-11 px-4 rounded-md border border-border text-sm font-medium flex items-center gap-2">
+          <button onClick={() => openModal("PITR")} className="min-h-11 px-4 rounded-md border border-border text-sm font-medium flex items-center gap-2">
             <HardDriveDownload className="w-4 h-4" /> Simulasi PITR
           </button>
         </div>
@@ -210,22 +257,26 @@ export default function DisasterRecoveryPage() {
         {kpis.map((k) => (
           <div key={k.label} className="rounded-lg border border-border bg-white p-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">{k.label}</span>
+              <span className="text-xs text-slate-600">{k.label}</span>
               <k.icon className={`w-4 h-4 ${k.color}`} />
             </div>
             <div className={`mt-2 text-xl font-bold font-mono ${k.color}`}>{k.value}</div>
-            <div className="text-xs text-muted-foreground mt-1">{k.sub}</div>
+            <div className="text-xs text-slate-600 mt-1">{k.sub}</div>
           </div>
         ))}
       </div>
 
-      <div role="tablist" className="flex flex-wrap gap-1 sm:gap-2 pb-1">
-        {tabs.map((t) => (
+      <div role="tablist" aria-label="Bagian Disaster Recovery" className="flex flex-wrap gap-1 sm:gap-2 pb-1">
+        {tabs.map((t, i) => (
           <button
             key={t.key}
+            id={`dr-tab-${t.key}`}
             role="tab"
             aria-selected={tab === t.key}
+            aria-controls="dr-tabpanel"
+            tabIndex={tab === t.key ? 0 : -1}
             onClick={() => setTab(t.key)}
+            onKeyDown={(e) => onTabKey(e, i)}
             className={`min-h-11 px-3 rounded-md text-sm font-medium flex items-center gap-2 ${
               tab === t.key ? "bg-action text-white" : "bg-white border border-border text-primary"
             }`}
@@ -235,6 +286,7 @@ export default function DisasterRecoveryPage() {
         ))}
       </div>
 
+      <div role="tabpanel" id="dr-tabpanel" aria-labelledby={`dr-tab-${tab}`} tabIndex={0}>
       {tab === "TOPOLOGY" && (
         <div className="space-y-4">
           <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-4">
@@ -245,15 +297,15 @@ export default function DisasterRecoveryPage() {
             {replicas.map((r) => (
               <div key={r.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
                 <div className="font-semibold text-primary truncate">{r.name}</div>
-                <div className="text-xs text-muted-foreground">{r.location}</div>
+                <div className="text-xs text-slate-600">{r.location}</div>
                 <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                  <dt className="text-muted-foreground">Lag</dt>
+                  <dt className="text-slate-600">Lag</dt>
                   <dd className="font-mono text-right">{r.lagMs} ms</dd>
-                  <dt className="text-muted-foreground">Lag bytes</dt>
+                  <dt className="text-slate-600">Lag bytes</dt>
                   <dd className="font-mono text-right">{r.lagBytes} B</dd>
-                  <dt className="text-muted-foreground">Koneksi</dt>
+                  <dt className="text-slate-600">Koneksi</dt>
                   <dd className="font-mono text-right">{r.connections}</dd>
-                  <dt className="text-muted-foreground">Mode</dt>
+                  <dt className="text-slate-600">Mode</dt>
                   <dd className="text-right">{r.role === "standby_sync" ? "Sync" : "Async"}</dd>
                 </dl>
               </div>
@@ -264,18 +316,18 @@ export default function DisasterRecoveryPage() {
 
       {tab === "PARTITIONS" && (
         <div className="space-y-3">
-          <button onClick={() => setModal("PARTITION")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
+          <button onClick={() => openModal("PARTITION")} className="min-h-11 px-4 rounded-md bg-action text-white text-sm font-medium flex items-center gap-2">
             <Plus className="w-4 h-4" /> Partisi Baru
           </button>
           <div className="rounded-lg border border-border bg-white overflow-hidden">
             <table className="w-full table-fixed text-xs sm:text-sm">
-              <thead className="bg-muted/40 text-left">
+              <thead className="bg-slate-100 text-left">
                 <tr>
-                  <th className="p-2 w-[34%]">Tenant / Schema</th>
-                  <th className="p-2 w-[12%]">TA</th>
-                  <th className="p-2 w-[16%]">Ukuran</th>
-                  <th className="p-2 w-[20%]">Status</th>
-                  <th className="p-2 w-[18%]">Aksi</th>
+                  <th scope="col" className="p-2 w-[34%]">Tenant / Schema</th>
+                  <th scope="col" className="p-2 w-[12%]">TA</th>
+                  <th scope="col" className="p-2 w-[16%]">Ukuran</th>
+                  <th scope="col" className="p-2 w-[20%]">Status</th>
+                  <th scope="col" className="p-2 w-[18%]">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -283,7 +335,7 @@ export default function DisasterRecoveryPage() {
                   <tr key={p.id} className="border-t border-border">
                     <td className="p-2 min-w-0">
                       <div className="font-medium truncate">{p.tenant}</div>
-                      <div className="font-mono text-[11px] text-muted-foreground truncate">{p.schema}</div>
+                      <div className="font-mono text-[11px] text-slate-600 truncate">{p.schema}</div>
                     </td>
                     <td className="p-2 font-mono">{p.year}</td>
                     <td className="p-2 font-mono">{p.size}</td>
@@ -293,16 +345,12 @@ export default function DisasterRecoveryPage() {
                       </span>
                     </td>
                     <td className="p-2">
-                      {p.status === "active" && p.year < 2026 ? (
-                        <button onClick={() => archive(p.id)} aria-label={`Arsipkan ${p.schema}`} className="min-h-11 min-w-11 flex items-center justify-center">
-                          <Archive className="w-4 h-4" />
-                        </button>
-                      ) : p.status === "active" ? (
+                      {p.status === "active" ? (
                         <button onClick={() => archive(p.id)} aria-label={`Arsipkan ${p.schema}`} className="min-h-11 min-w-11 flex items-center justify-center">
                           <Archive className="w-4 h-4" />
                         </button>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-slate-600">—</span>
                       )}
                     </td>
                   </tr>
@@ -343,7 +391,7 @@ export default function DisasterRecoveryPage() {
               {locks.map((l) => (
                 <li key={l.key} className="rounded border border-border p-2 text-xs min-w-0">
                   <div className="font-mono break-all">{l.key}</div>
-                  <div className="text-muted-foreground mt-1">{l.by} · TTL {l.ttl} ms</div>
+                  <div className="text-slate-600 mt-1">{l.by} · TTL {l.ttl} ms</div>
                 </li>
               ))}
             </ul>
@@ -360,7 +408,7 @@ export default function DisasterRecoveryPage() {
             {snapshots.map((s) => (
               <div key={s.id} className="rounded-lg border border-border bg-white p-4 min-w-0">
                 <div className="font-mono text-sm break-all">{s.id}</div>
-                <div className="text-xs text-muted-foreground mt-1">{s.at} · {s.size}</div>
+                <div className="text-xs text-slate-600 mt-1">{s.at} · {s.size}</div>
                 <div className="text-[11px] font-mono mt-2 break-all">SHA-256 {s.sha}</div>
                 <div className="text-xs text-emerald-700 mt-1">Terverifikasi</div>
               </div>
@@ -375,7 +423,7 @@ export default function DisasterRecoveryPage() {
             <div key={d.id} className="rounded-lg border border-border bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="min-w-0">
                 <div className="font-semibold text-primary">{d.title}</div>
-                <div className="text-xs font-mono text-muted-foreground">{d.code} · {d.duration}</div>
+                <div className="text-xs font-mono text-slate-600">{d.code} · {d.duration}</div>
                 <div className="text-xs mt-1">
                   RPO {d.rpo}s (&lt;{RPO_TARGET}s) · RTO {d.rto}s (&lt;{RTO_TARGET}s)
                 </div>
@@ -393,12 +441,13 @@ export default function DisasterRecoveryPage() {
           ))}
         </div>
       )}
+      </div>
 
       {modal && (
-        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg bg-white p-5 space-y-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="dr-modal-title" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div ref={dialogRef} className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-primary">
+              <h2 id="dr-modal-title" className="font-semibold text-primary">
                 {modal === "PARTITION" ? "Partisi Tenant Baru" : modal === "FAILOVER" ? "Simulasi Failover" : "Simulasi PITR"}
               </h2>
               <button onClick={() => setModal(null)} aria-label="Tutup" className="min-h-11 min-w-11 flex items-center justify-center">
