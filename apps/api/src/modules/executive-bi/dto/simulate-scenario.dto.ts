@@ -16,3 +16,4 @@ export class SimulateScenarioDto {
   @ApiPropertyOptional({ description: 'Deskripsi tujuan skenario simulasi' })
   description?: string;
 }
+

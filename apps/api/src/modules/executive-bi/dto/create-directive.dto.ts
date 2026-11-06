@@ -19,3 +19,4 @@ export class CreateDirectiveDto {
   @ApiPropertyOptional({ description: 'Catatan tambahan atau dampak eskalasi' })
   notes?: string;
 }
+

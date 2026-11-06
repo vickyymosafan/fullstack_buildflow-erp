@@ -8,3 +8,4 @@ import { ExecutiveBiController } from './executive-bi.controller';
   exports: [ExecutiveBiService],
 })
 export class ExecutiveBiModule {}
+
