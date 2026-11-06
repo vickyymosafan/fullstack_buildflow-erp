@@ -28,3 +28,4 @@ export class CreateAuditLogDto {
   @ApiPropertyOptional({ description: 'Status hasil operasi (SUCCESS, WARNING, FAILED)' })
   status?: 'SUCCESS' | 'WARNING' | 'FAILED';
 }
+

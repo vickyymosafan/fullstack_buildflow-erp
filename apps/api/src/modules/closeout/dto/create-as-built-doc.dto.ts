@@ -25,3 +25,4 @@ export class CreateAsBuiltDocDto {
   @ApiPropertyOptional({ description: 'Keterangan revisi dan lingkup perubahan lapangan' })
   description?: string;
 }
+
