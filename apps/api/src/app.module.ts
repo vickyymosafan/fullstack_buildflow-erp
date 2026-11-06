@@ -20,6 +20,7 @@ import { SubcontractorsModule } from './modules/subcontractors/subcontractors.mo
 import { EquipmentModule } from './modules/equipment/equipment.module';
 import { ChangeOrdersModule } from './modules/change-orders/change-orders.module';
 import { OfficialReportsModule } from './modules/official-reports/official-reports.module';
+import { JointOperationsModule } from './modules/joint-operations/joint-operations.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { OfficialReportsModule } from './modules/official-reports/official-repor
     EquipmentModule,
     ChangeOrdersModule,
     OfficialReportsModule,
+    JointOperationsModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
