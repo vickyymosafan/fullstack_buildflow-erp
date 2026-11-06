@@ -23,6 +23,7 @@ import { OfficialReportsModule } from './modules/official-reports/official-repor
 import { JointOperationsModule } from './modules/joint-operations/joint-operations.module';
 import { HandoverModule } from './modules/handover/handover.module';
 import { CloseoutModule } from './modules/closeout/closeout.module';
+import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CloseoutModule } from './modules/closeout/closeout.module';
     JointOperationsModule,
     HandoverModule,
     CloseoutModule,
+    ExecutiveBiModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,

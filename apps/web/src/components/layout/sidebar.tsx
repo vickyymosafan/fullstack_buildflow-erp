@@ -22,6 +22,7 @@ import {
   FileCheck,
   Archive,
   BarChart3,
+  TrendingUp,
   Briefcase,
   Workflow,
   Settings,
@@ -45,6 +46,7 @@ const navSections: NavSection[] = [
     title: "UTAMA",
     items: [
       { title: "Executive Overview", href: "/overview", icon: LayoutDashboard },
+      { title: "Executive Board BI", href: "/executive-bi", icon: TrendingUp, badge: "AI / BI" },
       { title: "Orkestrasi Alur Bisnis", href: "/orchestration", icon: Workflow, badge: "Auto" },
       { title: "CRM & Tender", href: "/crm", icon: Briefcase, badge: "Live" },
       { title: "Persetujuan & SoD", href: "/approvals", icon: ShieldCheck, badge: "Live" },
