@@ -22,6 +22,7 @@ import { ChangeOrdersModule } from './modules/change-orders/change-orders.module
 import { OfficialReportsModule } from './modules/official-reports/official-reports.module';
 import { JointOperationsModule } from './modules/joint-operations/joint-operations.module';
 import { HandoverModule } from './modules/handover/handover.module';
+import { CloseoutModule } from './modules/closeout/closeout.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { HandoverModule } from './modules/handover/handover.module';
     OfficialReportsModule,
     JointOperationsModule,
     HandoverModule,
+    CloseoutModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
