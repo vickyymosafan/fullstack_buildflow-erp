@@ -31,6 +31,7 @@ import {
   Settings,
   Store,
   WalletCards,
+  DatabaseZap,
   X,
 } from "lucide-react";
 
@@ -93,6 +94,7 @@ const navSections: NavSection[] = [
       { title: "Treasury & Cash Pooling", href: "/treasury", icon: WalletCards, badge: "H2H" },
       { title: "Karyawan & Timesheet", href: "/hr", icon: Users2 },
       { title: "Analitik & Laporan", href: "/analytics", icon: BarChart3 },
+      { title: "Disaster Recovery & HA", href: "/disaster-recovery", icon: DatabaseZap, badge: "DR / HA" },
     ],
   },
 ];
