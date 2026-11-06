@@ -24,6 +24,7 @@ import { JointOperationsModule } from './modules/joint-operations/joint-operatio
 import { HandoverModule } from './modules/handover/handover.module';
 import { CloseoutModule } from './modules/closeout/closeout.module';
 import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
+import { SustainabilityModule } from './modules/sustainability/sustainability.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
     HandoverModule,
     CloseoutModule,
     ExecutiveBiModule,
+    SustainabilityModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
