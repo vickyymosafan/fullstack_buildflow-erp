@@ -31,6 +31,7 @@ import { BimModule } from './modules/bim/bim.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
 import { DisasterRecoveryModule } from './modules/disaster-recovery/disaster-recovery.module';
 import { IotGatewayModule } from './modules/iot-gateway/iot-gateway.module';
+import { PhotogrammetryModule } from './modules/photogrammetry/photogrammetry.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { IotGatewayModule } from './modules/iot-gateway/iot-gateway.module';
     ContractsModule,
     DisasterRecoveryModule,
     IotGatewayModule,
+    PhotogrammetryModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
