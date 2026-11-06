@@ -8,3 +8,4 @@ import { VendorPortalService } from './vendor-portal.service';
   exports: [VendorPortalService],
 })
 export class VendorPortalModule {}
+

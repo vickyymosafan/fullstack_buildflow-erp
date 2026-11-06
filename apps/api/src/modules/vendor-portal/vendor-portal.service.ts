@@ -957,3 +957,4 @@ export class VendorPortalService {
     return this.bids.filter((b) => b.rfqId === rfqId);
   }
 }
+

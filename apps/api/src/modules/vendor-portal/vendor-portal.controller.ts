@@ -116,3 +116,4 @@ export class VendorPortalController {
     return this.vendorPortalService.getBidsByRfq(id);
   }
 }
+
