@@ -30,6 +30,7 @@ import { TreasuryModule } from './modules/treasury/treasury.module';
 import { BimModule } from './modules/bim/bim.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
 import { DisasterRecoveryModule } from './modules/disaster-recovery/disaster-recovery.module';
+import { IotGatewayModule } from './modules/iot-gateway/iot-gateway.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { DisasterRecoveryModule } from './modules/disaster-recovery/disaster-rec
     BimModule,
     ContractsModule,
     DisasterRecoveryModule,
+    IotGatewayModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,

@@ -32,6 +32,7 @@ import {
   Store,
   WalletCards,
   DatabaseZap,
+  Cpu,
   X,
 } from "lucide-react";
 
@@ -69,6 +70,7 @@ const navSections: NavSection[] = [
       { title: "Sustainability & ESG", href: "/sustainability", icon: Leaf, badge: "ESG" },
       { title: "Subkontraktor & Mandor", href: "/subcontractors", icon: Handshake, badge: "SPK / MC" },
       { title: "Alat Berat & Armada", href: "/equipment", icon: Truck, badge: "Fleet / HM" },
+      { title: "IoT Gateway & Telematika", href: "/iot-gateway", icon: Cpu, badge: "IoT / Edge" },
       { title: "CCO & Addendum Kontrak", href: "/change-orders", icon: FileSignature, badge: "CCO / VO" },
       { title: "Laporan PUPR & Kurva S", href: "/official-reports", icon: Award, badge: "PUPR / EVM" },
       { title: "Konsorsium KSO & Kas Bersama", href: "/joint-operations", icon: Scale, badge: "KSO / JO" },
