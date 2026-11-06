@@ -26,6 +26,7 @@ import { CloseoutModule } from './modules/closeout/closeout.module';
 import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
 import { SustainabilityModule } from './modules/sustainability/sustainability.module';
 import { VendorPortalModule } from './modules/vendor-portal/vendor-portal.module';
+import { TreasuryModule } from './modules/treasury/treasury.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { VendorPortalModule } from './modules/vendor-portal/vendor-portal.module
     ExecutiveBiModule,
     SustainabilityModule,
     VendorPortalModule,
+    TreasuryModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
