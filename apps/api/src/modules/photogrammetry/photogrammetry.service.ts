@@ -498,3 +498,4 @@ export class PhotogrammetryService {
     return defect;
   }
 }
+

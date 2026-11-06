@@ -109,3 +109,4 @@ export class ResolveAiDefectDto {
   })
   remediationNotes!: string;
 }
+
