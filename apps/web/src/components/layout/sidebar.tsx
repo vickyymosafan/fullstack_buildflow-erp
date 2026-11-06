@@ -26,6 +26,7 @@ import {
   Leaf,
   Briefcase,
   Box,
+  Gavel,
   Workflow,
   Settings,
   Store,
@@ -74,6 +75,7 @@ const navSections: NavSection[] = [
       { title: "Penutupan & Audit Trail", href: "/closeout", icon: Archive, badge: "Closeout" },
       { title: "Dokumen & Gambar", href: "/documents", icon: FolderLock },
       { title: "BIM 4D/5D & Digital Twin", href: "/bim", icon: Box, badge: "WebGL" },
+      { title: "AI Legal & Sengketa BANI", href: "/contracts", icon: Gavel, badge: "AI Legal" },
     ],
   },
   {

@@ -28,6 +28,7 @@ import { SustainabilityModule } from './modules/sustainability/sustainability.mo
 import { VendorPortalModule } from './modules/vendor-portal/vendor-portal.module';
 import { TreasuryModule } from './modules/treasury/treasury.module';
 import { BimModule } from './modules/bim/bim.module';
+import { ContractsModule } from './modules/contracts/contracts.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { BimModule } from './modules/bim/bim.module';
     VendorPortalModule,
     TreasuryModule,
     BimModule,
+    ContractsModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,
