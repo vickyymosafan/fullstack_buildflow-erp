@@ -76,3 +76,4 @@ export class SustainabilityController {
     return this.sustainabilityService.approveInitiative(id);
   }
 }
+

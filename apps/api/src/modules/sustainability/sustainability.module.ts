@@ -8,3 +8,4 @@ import { SustainabilityService } from './sustainability.service';
   exports: [SustainabilityService],
 })
 export class SustainabilityModule {}
+

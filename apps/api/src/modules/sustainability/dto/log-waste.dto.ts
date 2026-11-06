@@ -55,3 +55,4 @@ export class LogWasteDto {
   @ApiPropertyOptional({ description: 'Catatan lokasi pemilahan di site atau penampungan sementara' })
   notes?: string;
 }
+

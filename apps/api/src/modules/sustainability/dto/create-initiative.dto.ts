@@ -39,3 +39,4 @@ export class CreateInitiativeDto {
   @ApiProperty({ description: 'Uraian teknis implementasi dan metodologi verifikasi' })
   description: string;
 }
+

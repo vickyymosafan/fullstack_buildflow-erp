@@ -46,3 +46,4 @@ export class LogEmissionDto {
   @ApiPropertyOptional({ description: 'Catatan operasional lapangan atau nomor delivery order' })
   notes?: string;
 }
+
