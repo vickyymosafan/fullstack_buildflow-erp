@@ -71,3 +71,4 @@ const post = (p, b) => fetch(API + p, { method: "POST", headers: { "Content-Type
   console.log(`\n${pass}/${pass + fail} passed`);
   process.exit(fail ? 1 : 0);
 })();
+

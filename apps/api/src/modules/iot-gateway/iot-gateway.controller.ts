@@ -99,3 +99,4 @@ export class IotGatewayController {
     return this.iotService.pingGateway(dto);
   }
 }
+

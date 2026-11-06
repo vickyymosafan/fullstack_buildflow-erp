@@ -101,3 +101,4 @@ export class PingGatewayDto {
   @ApiProperty({ example: 'gw-weigh-01', description: 'ID gateway yang diuji konektivitasnya' })
   gatewayId: string;
 }
+
