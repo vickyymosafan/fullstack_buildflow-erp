@@ -27,6 +27,7 @@ import { ExecutiveBiModule } from './modules/executive-bi/executive-bi.module';
 import { SustainabilityModule } from './modules/sustainability/sustainability.module';
 import { VendorPortalModule } from './modules/vendor-portal/vendor-portal.module';
 import { TreasuryModule } from './modules/treasury/treasury.module';
+import { BimModule } from './modules/bim/bim.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { TreasuryModule } from './modules/treasury/treasury.module';
     SustainabilityModule,
     VendorPortalModule,
     TreasuryModule,
+    BimModule,
     DocumentsModule,
     AnalyticsModule,
     CrmModule,

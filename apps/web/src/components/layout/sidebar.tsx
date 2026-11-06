@@ -25,6 +25,7 @@ import {
   TrendingUp,
   Leaf,
   Briefcase,
+  Box,
   Workflow,
   Settings,
   Store,
@@ -72,6 +73,7 @@ const navSections: NavSection[] = [
       { title: "Serah Terima & BAST", href: "/handover", icon: FileCheck, badge: "PHO / FHO" },
       { title: "Penutupan & Audit Trail", href: "/closeout", icon: Archive, badge: "Closeout" },
       { title: "Dokumen & Gambar", href: "/documents", icon: FolderLock },
+      { title: "BIM 4D/5D & Digital Twin", href: "/bim", icon: Box, badge: "WebGL" },
     ],
   },
   {
